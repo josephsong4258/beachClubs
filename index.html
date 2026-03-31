@@ -1228,10 +1228,6 @@ function renderInterests() {
     <div class="interests-header-area"><h2>My Interests</h2></div>
     <div class="interests-count">${savedClubs.length} club${savedClubs.length !== 1 ? 's' : ''} saved</div>
     ${listHTML}
-    <div style="margin-top:16px">
-      <button class="action-btn secondary" onclick="copyList()">Copy my list</button>
-      <button class="action-btn primary" onclick="showToast('Opening Google Calendar...')">Add to Google Calendar</button>
-    </div>
   `;
 }
 
@@ -1241,21 +1237,6 @@ function removeInterest(id) {
   showToast("Club removed");
 }
 
-function copyList() {
-  const savedClubs = clubs.filter(c => saved.includes(c.id));
-  const text = savedClubs.map(c => {
-    const parts = [c.name];
-    if (c.instagram) parts.push(c.instagram);
-    if (c.email) parts.push(c.email);
-    return parts.join(" - ");
-  }).join("\n");
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector(".action-btn.secondary");
-    btn.textContent = "Copied!";
-    btn.classList.add("copied");
-    setTimeout(() => { btn.textContent = "Copy my list"; btn.classList.remove("copied"); }, 2000);
-  });
-}
 
 /* ═══════════════════════════════════════════════════
    TOAST
