@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>beachClubs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f7f7f5;
+  color: #37352f;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── App Shell ────────────────────────────────────── */
+#app {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.screen {
+  display: none;
+  padding: 0 24px 32px;
+  animation: fadeIn 0.2s ease;
+}
+.screen.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ───────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px 0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+  flex-shrink: 0;
+  color: #91918e;
+}
+.back-btn:hover { background: #f1f1ef; }
+
+.header-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #91918e;
+}
+
+.saved-btn {
+  position: relative;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #91918e;
+  transition: background 0.1s;
+  flex-shrink: 0;
+}
+.saved-btn:hover { background: #f1f1ef; }
+
+.saved-badge {
+  background: #eb5757;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+.saved-badge.hidden { display: none; }
+
+/* ── Screen 1: Home ───────────────────────────────── */
+.home-hero {
+  padding: 40px 0 28px;
+}
+.home-hero h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -1.5px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.home-hero h1 .gold {
+  color: #F0AB00;
+}
+
+.search-wrap {
+  position: relative;
+  margin-bottom: 28px;
+}
+.search-wrap input {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #e3e3e0;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+  background: #f7f7f5;
+  transition: border-color 0.15s, background 0.15s;
+  color: #37352f;
+}
+.search-wrap input::placeholder { color: #b4b4b0; }
+.search-wrap input:focus { border-color: #2eaadc; background: #fff; }
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #91918e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+/* Search results dropdown */
+.search-results {
+  display: none;
+  margin-top: -20px;
+  margin-bottom: 28px;
+  border: 1px solid #e3e3e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.search-results.active { display: block; }
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.08s;
+  gap: 10px;
+}
+.search-result-item:hover { background: #f7f7f5; }
+
+.search-result-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.search-result-info { flex: 1; }
+.search-result-name { font-weight: 500; font-size: 14px; color: #37352f; }
+.search-result-cat { font-size: 12px; color: #91918e; }
+
+.category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.category-card {
+  border: none;
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #f7f7f5;
+}
+.category-card:hover { background: #efefed; }
+.category-card:active { background: #e8e8e5; }
+
+.category-card .cat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+.category-card .name { font-size: 15px; font-weight: 600; color: #37352f; }
+.category-card .count { font-size: 12px; color: #91918e; }
+
+/* Dot colors per category */
+.dot-academic    { background: #4daa57; }
+.dot-sports      { background: #2eaadc; }
+.dot-arts        { background: #eb5757; }
+.dot-social      { background: #f2c144; }
+.dot-tech        { background: #9065b0; }
+.dot-cultural    { background: #e9823a; }
+.dot-engineering { background: #4a90d9; }
+.dot-health      { background: #e06f8b; }
+
+/* ── Screen 2: Listings ───────────────────────────── */
+.listings-header {
+  padding: 28px 0 4px;
+}
+.listings-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.listings-header h2 .cat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.listings-count {
+  font-size: 12px;
+  color: #91918e;
+  padding: 8px 0 12px;
+}
+
+.club-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.club-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.08s;
+}
+.club-card:hover { background: #f7f7f5; }
+
+.club-card .club-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f1f1ef;
+}
+.club-card .club-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.club-card .club-avatar-placeholder .cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.club-card .cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.club-card .club-info { flex: 1; min-width: 0; }
+.club-card .club-name {
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #37352f;
+}
+.club-card .club-meta {
+  font-size: 12px;
+  color: #91918e;
+}
+.club-card .arrow {
+  color: #d3d3d0;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.empty-list {
+  text-align: center;
+  padding: 40px 16px;
+  color: #91918e;
+  font-size: 14px;
+}
+
+/* ── Divider ──────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: #f1f1ef;
+  margin: 4px 0;
+}
+
+/* ── Screen 3: Detail ─────────────────────────────── */
+.detail-header-area {
+  padding: 28px 0 20px;
+}
+.detail-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  background: #f7f7f5;
+}
+.detail-header-area h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #37352f;
+}
+
+.detail-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #f1f1ef;
+  color: #91918e;
+}
+.tag.cat-tag {
+  color: #fff;
+}
+
+.detail-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #55534e;
+  margin-bottom: 24px;
+}
+
+.connect-section {
+  margin-bottom: 24px;
+}
+.connect-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #91918e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.connect-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+a.connect-item, .connect-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f7f7f5;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #37352f;
+  cursor: pointer;
+  transition: background 0.1s;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+.connect-item:hover { background: #efefed; }
+.connect-item .connect-type {
+  font-size: 12px;
+  font-weight: 500;
+  color: #91918e;
+  min-width: 64px;
+}
+.connect-item .connect-value {
+  font-weight: 500;
+  flex: 1;
+}
+
+/* ── Ratings (RMP-style) ─────────────────────────── */
+.ratings-section {
+  margin-bottom: 24px;
+}
+.ratings-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #91918e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.ratings-overview {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.ratings-big-score {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ratings-big-score .big-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.ratings-big-score .big-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-top: 2px;
+}
+.ratings-meta {
+  flex: 1;
+  padding-top: 4px;
+}
+.ratings-meta .rating-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #37352f;
+}
+.ratings-meta .rating-hint {
+  font-size: 12px;
+  color: #91918e;
+  margin-top: 2px;
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #f7f7f5;
+  border-radius: 6px;
+}
+.metric-item .metric-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #37352f;
+}
+.metric-item .metric-score {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: right;
+}
+.rate-btn {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #e3e3e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s;
+  background: #fff;
+  color: #37352f;
+  margin-top: 10px;
+}
+.rate-btn:hover { background: #f7f7f5; }
+
+/* Rating form */
+.rate-form {
+  margin-top: 10px;
+  padding: 16px;
+  background: #f7f7f5;
+  border-radius: 8px;
+}
+.rate-form-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #37352f;
+  margin-bottom: 14px;
+}
+.rate-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.rate-field .rate-field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #37352f;
+}
+.rate-field .rate-dots {
+  display: flex;
+  gap: 4px;
+}
+.rate-field .rate-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #e3e3e0;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #91918e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+}
+.rate-field .rate-dot:hover { border-color: #37352f; color: #37352f; }
+.rate-field .rate-dot.selected { background: #37352f; color: #fff; border-color: #37352f; }
+.rate-submit {
+  width: 100%;
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #37352f;
+  color: #fff;
+  margin-top: 6px;
+  transition: background 0.1s;
+}
+.rate-submit:hover { background: #4b4a45; }
+
+.interest-btn {
+  width: 100%;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.interest-btn.save {
+  background: #2eaadc;
+  color: #fff;
+}
+.interest-btn.save:hover { background: #2898c5; }
+
+.interest-btn.saved {
+  background: #f1f1ef;
+  color: #37352f;
+}
+.interest-btn.saved:hover { background: #e8e8e5; }
+
+/* ── Screen 4: My Interests ──────────────────────── */
+.interests-header-area {
+  padding: 28px 0 8px;
+}
+.interests-header-area h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.interests-count {
+  font-size: 12px;
+  color: #91918e;
+  margin-bottom: 16px;
+}
+
+.saved-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: 6px;
+}
+.saved-card:hover { background: #f7f7f5; }
+.saved-card .cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.saved-card .club-info { flex: 1; min-width: 0; cursor: pointer; }
+.saved-card .club-name { font-weight: 500; font-size: 14px; color: #37352f; }
+.saved-card .club-meta { font-size: 12px; color: #91918e; }
+
+.remove-btn {
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: #91918e;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+.remove-btn:hover { background: #f1f1ef; color: #eb5757; }
+
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+}
+.empty-state p {
+  color: #91918e;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.empty-state .browse-btn {
+  margin-top: 16px;
+  display: inline-block;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #2eaadc;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.empty-state .browse-btn:hover { background: #2898c5; }
+
+.action-btn {
+  width: 100%;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+.action-btn.secondary {
+  background: #f1f1ef;
+  color: #37352f;
+}
+.action-btn.secondary:hover { background: #e8e8e5; }
+.action-btn.secondary.copied { background: #dbeddb; color: #4daa57; }
+
+.action-btn.primary {
+  background: #37352f;
+  color: #fff;
+}
+.action-btn.primary:hover { background: #4b4a45; }
+
+/* ── Toast ────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #37352f;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 100;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Screen 1: Home -->
+  <div id="screen-home" class="screen active">
+    <div class="header">
+      <div class="header-left"></div>
+      <button class="saved-btn" onclick="showScreen('interests')">
+        Saved
+        <span class="saved-badge hidden" id="badge-home">0</span>
+      </button>
+    </div>
+    <div class="home-hero">
+      <h1><span class="gold">beach</span>Clubs</h1>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Search clubs..." oninput="handleSearch()" />
+    </div>
+    <div class="search-results" id="search-results"></div>
+    <div class="section-label">Categories</div>
+    <div class="category-grid" id="category-grid"></div>
+  </div>
+
+  <!-- Screen 2: Listings -->
+  <div id="screen-listings" class="screen">
+    <div class="header">
+      <div class="header-left">
+        <button class="back-btn" onclick="showScreen('home')">&#8592;</button>
+        <span class="header-title" id="listings-breadcrumb">Categories</span>
+      </div>
+      <button class="saved-btn" onclick="showScreen('interests')">
+        Saved
+        <span class="saved-badge hidden" id="badge-listings">0</span>
+      </button>
+    </div>
+    <div class="listings-header"><h2><span class="cat-dot" id="listings-dot"></span> <span id="listings-title"></span></h2></div>
+    <div class="club-list" id="club-list"></div>
+  </div>
+
+  <!-- Screen 3: Detail -->
+  <div id="screen-detail" class="screen">
+    <div class="header">
+      <div class="header-left">
+        <button class="back-btn" id="detail-back-btn">&#8592;</button>
+        <span class="header-title" id="detail-breadcrumb"></span>
+      </div>
+      <button class="saved-btn" onclick="showScreen('interests')">
+        Saved
+        <span class="saved-badge hidden" id="badge-detail">0</span>
+      </button>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- Screen 4: My Interests -->
+  <div id="screen-interests" class="screen">
+    <div class="header">
+      <div class="header-left">
+        <button class="back-btn" id="interests-back-btn">&#8592;</button>
+        <span class="header-title">Back</span>
+      </div>
+      <button class="saved-btn" onclick="showScreen('interests')">
+        Saved
+        <span class="saved-badge hidden" id="badge-interests">0</span>
+      </button>
+    </div>
+    <div id="interests-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════
+   DERIVED DATA — extract contact info from real data
+   ═══════════════════════════════════════════════════ */
+clubs.forEach(c => {
+  c.imageUrl = c.profilePicture ? IMAGE_BASE_URL + c.profilePicture : null;
+  c.clubPageUrl = CLUB_BASE_URL + c.websiteKey;
+
+  // Extract Instagram handle from URL
+  const igUrl = c.socialMedia && c.socialMedia.instagram;
+  if (igUrl) {
+    const match = igUrl.match(/instagram\.com\/([^/?]+)/);
+    c.instagram = match ? "@" + match[1] : null;
+  } else {
+    c.instagram = null;
+  }
+});
+
+const categories = [
+  { name:"Academic",    dot:"dot-academic" },
+  { name:"Engineering", dot:"dot-engineering" },
+  { name:"Arts",        dot:"dot-arts" },
+  { name:"Sports",      dot:"dot-sports" },
+  { name:"Cultural",    dot:"dot-cultural" },
+  { name:"Health",      dot:"dot-health" },
+  { name:"Tech",        dot:"dot-tech" },
+  { name:"Social",      dot:"dot-social" },
+];
+
+const catColors = {
+  Academic:    "#4daa57",
+  Sports:      "#2eaadc",
+  Arts:        "#eb5757",
+  Social:      "#f2c144",
+  Tech:        "#9065b0",
+  Cultural:    "#e9823a",
+  Engineering: "#4a90d9",
+  Health:      "#e06f8b",
+};
+
+function dotClass(category) {
+  return "dot-" + category.toLowerCase();
+}
+
+/* catDescriptions kept as fallback if club has no description */
+const catDescriptions = {
+  Academic:    "Connect with peers in your field through study groups, guest speakers, and professional development events.",
+  Engineering: "Build your portfolio through hands-on projects, industry networking, and professional development workshops.",
+  Arts:        "Express yourself through collaborative projects, performances, and exhibitions.",
+  Sports:      "Stay active and compete with fellow students. All skill levels welcome.",
+  Cultural:    "Celebrate heritage and identity through cultural events, community service, and social gatherings.",
+  Health:      "Prepare for your health career through study groups, clinical exposure, and networking.",
+  Tech:        "Learn new technologies, work on projects, and connect with the tech community.",
+  Social:      "Get involved on campus through community service, advocacy, and social events.",
+};
+
+/* ═══════════════════════════════════════════════════
+   RATINGS — deterministic seed + user reviews
+   ═══════════════════════════════════════════════════ */
+const metricNames = ["Active", "Inclusive", "Social Community", "Competitiveness"];
+
+function hashName(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = ((h << 5) - h + name.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function seedRatings(club) {
+  const h = hashName(club.name);
+  const base = [
+    2.5 + ((h % 23) / 23) * 2.5,
+    2.8 + (((h >> 3) % 19) / 19) * 2.2,
+    2.3 + (((h >> 6) % 29) / 29) * 2.7,
+    1.5 + (((h >> 9) % 17) / 17) * 3.5,
+  ];
+  const count = 5 + (h % 40);
+  return { metrics: base.map(v => Math.round(v * 10) / 10), count };
+}
+
+function getUserReviews() {
+  return JSON.parse(localStorage.getItem("csulb_reviews") || "{}");
+}
+
+function saveUserReview(clubId, ratings) {
+  const reviews = getUserReviews();
+  reviews[clubId] = ratings;
+  localStorage.setItem("csulb_reviews", JSON.stringify(reviews));
+}
+
+function getClubRatings(club) {
+  const seed = seedRatings(club);
+  const userReviews = getUserReviews();
+  const userR = userReviews[club.id];
+  if (userR) {
+    const total = seed.count + 1;
+    const merged = seed.metrics.map((v, i) =>
+      Math.round(((v * seed.count + userR[i]) / total) * 10) / 10
+    );
+    return { metrics: merged, count: total, userRated: true };
+  }
+  return { ...seed, userRated: false };
+}
+
+function ratingColor(score) {
+  if (score >= 4.0) return "#4daa57";
+  if (score >= 3.0) return "#f2c144";
+  return "#eb5757";
+}
+
+function metricColor(score) {
+  if (score >= 4.0) return "#4daa57";
+  if (score >= 3.0) return "#91918e";
+  return "#eb5757";
+}
+
+/* ═══════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════ */
+let saved = JSON.parse(localStorage.getItem("csulb_saved") || "[]");
+let currentCategory = null;
+let previousScreen = "home";
+
+function persistSaved() {
+  localStorage.setItem("csulb_saved", JSON.stringify(saved));
+}
+
+function isSaved(id) { return saved.includes(id); }
+
+function toggleSave(id) {
+  if (isSaved(id)) saved = saved.filter(x => x !== id);
+  else saved.push(id);
+  persistSaved();
+  updateBadges();
+}
+
+/* ═══════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════ */
+function showScreen(name, opts) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById("screen-" + name).classList.add("active");
+  window.scrollTo(0, 0);
+
+  if (name === "listings" && opts && opts.category) {
+    currentCategory = opts.category;
+    renderListings();
+  }
+  if (name === "detail" && opts && opts.clubId) {
+    renderDetail(opts.clubId);
+  }
+  if (name === "interests") {
+    renderInterests();
+  }
+
+  if (name !== "detail" && name !== "interests") {
+    previousScreen = name;
+  }
+
+  updateBadges();
+}
+
+/* ═══════════════════════════════════════════════════
+   BADGES
+   ═══════════════════════════════════════════════════ */
+function updateBadges() {
+  const count = saved.length;
+  document.querySelectorAll(".saved-badge").forEach(b => {
+    b.textContent = count;
+    b.classList.toggle("hidden", count === 0);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 1: HOME
+   ═══════════════════════════════════════════════════ */
+function renderHome() {
+  const grid = document.getElementById("category-grid");
+  grid.innerHTML = categories.map(cat => {
+    const count = clubs.filter(c => c.category === cat.name).length;
+    return `<button class="category-card" onclick="showScreen('listings',{category:'${cat.name}'})">
+      <div class="cat-dot ${cat.dot}"></div>
+      <span class="name">${cat.name}</span>
+      <span class="count">${count} clubs</span>
+    </button>`;
+  }).join("");
+}
+
+/* Search */
+function handleSearch() {
+  const q = document.getElementById("search-input").value.trim().toLowerCase();
+  const container = document.getElementById("search-results");
+
+  if (!q) {
+    container.classList.remove("active");
+    container.innerHTML = "";
+    return;
+  }
+
+  const results = clubs.filter(c => c.name.toLowerCase().includes(q)).slice(0, 12);
+  if (results.length === 0) {
+    container.classList.add("active");
+    container.innerHTML = '<div class="empty-list">No results</div>';
+    return;
+  }
+
+  container.classList.add("active");
+  container.innerHTML = results.map(c => {
+    const thumb = c.imageUrl
+      ? `<img src="${c.imageUrl}" alt="" style="width:24px;height:24px;border-radius:4px;object-fit:cover;flex-shrink:0;background:#f1f1ef" onerror="this.outerHTML='<div class=\\'search-result-dot ${dotClass(c.category)}\\'></div>'">`
+      : `<div class="search-result-dot ${dotClass(c.category)}"></div>`;
+    return `<div class="search-result-item" onclick="previousScreen='home';showScreen('detail',{clubId:${c.id}})">
+      ${thumb}
+      <div class="search-result-info">
+        <div class="search-result-name">${c.name}</div>
+        <div class="search-result-cat">${c.category}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 2: LISTINGS
+   ═══════════════════════════════════════════════════ */
+function renderListings() {
+  document.getElementById("listings-title").textContent = currentCategory;
+  document.getElementById("listings-dot").className = "cat-dot " + dotClass(currentCategory);
+
+  const filtered = clubs.filter(c => c.category === currentCategory);
+
+  const list = document.getElementById("club-list");
+  list.innerHTML = `<div class="listings-count">${filtered.length} organizations</div>` +
+    filtered.map(c => {
+      const avatar = c.imageUrl
+        ? `<img class="club-avatar" src="${c.imageUrl}" alt="" onerror="this.outerHTML='<div class=\\'club-avatar-placeholder\\'><div class=\\'cat-dot ${dotClass(c.category)}\\'></div></div>'">`
+        : `<div class="club-avatar-placeholder"><div class="cat-dot ${dotClass(c.category)}"></div></div>`;
+      return `<div class="club-card" onclick="previousScreen='listings';showScreen('detail',{clubId:${c.id}})">
+      ${avatar}
+      <div class="club-info">
+        <div class="club-name">${c.name}</div>
+        <div class="club-meta">${c.category}${c.instagram ? ' · ' + c.instagram : ''}</div>
+      </div>
+      <span class="arrow">&#8250;</span>
+    </div>`;
+    }).join("");
+}
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 3: DETAIL
+   ═══════════════════════════════════════════════════ */
+let currentClubId = null;
+
+function renderDetail(id) {
+  currentClubId = id;
+  const c = clubs.find(x => x.id === id);
+  const alreadySaved = isSaved(id);
+  const color = catColors[c.category];
+
+  document.getElementById("detail-breadcrumb").textContent = c.category;
+  document.getElementById("detail-back-btn").onclick = () => showScreen(previousScreen, previousScreen === "listings" ? { category: currentCategory } : undefined);
+
+  const r = getClubRatings(c);
+  const overall = Math.round((r.metrics.reduce((a, b) => a + b, 0) / 4) * 10) / 10;
+  const overallColor = ratingColor(overall);
+  const desc = c.description || catDescriptions[c.category];
+
+  // Build connect items from real data
+  let connectHTML = "";
+  if (c.instagram) {
+    const igUrl = c.socialMedia.instagram;
+    connectHTML += `<a class="connect-item" href="${igUrl}" target="_blank" rel="noopener">
+      <span class="connect-type">Instagram</span>
+      <span class="connect-value">${c.instagram}</span>
+    </a>`;
+  }
+  if (c.email) {
+    connectHTML += `<a class="connect-item" href="mailto:${c.email}">
+      <span class="connect-type">Email</span>
+      <span class="connect-value">${c.email}</span>
+    </a>`;
+  }
+  if (c.socialMedia && c.socialMedia.website) {
+    const domain = c.socialMedia.website.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    connectHTML += `<a class="connect-item" href="${c.socialMedia.website}" target="_blank" rel="noopener">
+      <span class="connect-type">Website</span>
+      <span class="connect-value">${domain}</span>
+    </a>`;
+  }
+  if (c.socialMedia && c.socialMedia.linkedin) {
+    connectHTML += `<a class="connect-item" href="${c.socialMedia.linkedin}" target="_blank" rel="noopener">
+      <span class="connect-type">LinkedIn</span>
+      <span class="connect-value">View profile</span>
+    </a>`;
+  }
+  if (c.socialMedia && c.socialMedia.discord) {
+    connectHTML += `<a class="connect-item" href="${c.socialMedia.discord}" target="_blank" rel="noopener">
+      <span class="connect-type">Discord</span>
+      <span class="connect-value">Join server</span>
+    </a>`;
+  }
+  connectHTML += `<a class="connect-item" href="${c.clubPageUrl}" target="_blank" rel="noopener">
+    <span class="connect-type">BeachSync</span>
+    <span class="connect-value">View on BeachSync</span>
+  </a>`;
+
+  const avatarHTML = c.imageUrl
+    ? `<img class="detail-avatar" src="${c.imageUrl}" alt="${c.name}" onerror="this.style.display='none'">`
+    : "";
+
+  document.getElementById("detail-content").innerHTML = `
+    <div class="detail-header-area">
+      ${avatarHTML}
+      <h2>${c.name}</h2>
+    </div>
+    <div class="detail-tags">
+      <span class="tag cat-tag" style="background:${color}">${c.category}</span>
+      <span class="tag">Open to all</span>
+    </div>
+    <p class="detail-desc">${desc}</p>
+    <div class="ratings-section">
+      <div class="ratings-label">Ratings</div>
+      <div class="ratings-overview">
+        <div class="ratings-big-score" style="background:${overallColor}">
+          <span class="big-num">${overall}</span>
+          <span class="big-label">/ 5</span>
+        </div>
+        <div class="ratings-meta">
+          <div class="rating-count">${r.count} rating${r.count !== 1 ? 's' : ''}</div>
+          <div class="rating-hint">Based on student reviews</div>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        ${metricNames.map((name, i) => `
+          <div class="metric-item">
+            <span class="metric-name">${name}</span>
+            <span class="metric-score" style="color:${metricColor(r.metrics[i])}">${r.metrics[i]}</span>
+          </div>
+        `).join("")}
+      </div>
+      ${r.userRated
+        ? '<div style="text-align:center;font-size:12px;color:#91918e;margin-top:10px;">You rated this club</div>'
+        : `<button class="rate-btn" onclick="showRateForm(${c.id})">Rate this club</button>`
+      }
+      <div id="rate-form-container"></div>
+    </div>
+    <div class="connect-section">
+      <div class="connect-label">Connect</div>
+      <div class="connect-list">${connectHTML}</div>
+    </div>
+    <button class="interest-btn ${alreadySaved ? 'saved' : 'save'}" onclick="handleInterestClick(${c.id})">
+      ${alreadySaved ? 'Saved' : "I'm interested"}
+    </button>
+  `;
+}
+
+function handleInterestClick(id) {
+  toggleSave(id);
+  renderDetail(id);
+  showToast(isSaved(id) ? "Added to your interests" : "Removed from interests");
+}
+
+let rateFormState = [0, 0, 0, 0];
+
+function showRateForm(clubId) {
+  rateFormState = [0, 0, 0, 0];
+  const container = document.getElementById("rate-form-container");
+  container.innerHTML = `
+    <div class="rate-form">
+      <div class="rate-form-title">Rate this club</div>
+      ${metricNames.map((name, i) => `
+        <div class="rate-field">
+          <span class="rate-field-label">${name}</span>
+          <div class="rate-dots">
+            ${[1,2,3,4,5].map(v => `
+              <button class="rate-dot" data-metric="${i}" data-val="${v}" onclick="selectRating(${i},${v})">${v}</button>
+            `).join("")}
+          </div>
+        </div>
+      `).join("")}
+      <button class="rate-submit" onclick="submitRating(${clubId})">Submit</button>
+    </div>
+  `;
+  document.querySelector(".rate-btn").style.display = "none";
+}
+
+function selectRating(metric, val) {
+  rateFormState[metric] = val;
+  document.querySelectorAll(`.rate-dot[data-metric="${metric}"]`).forEach(btn => {
+    btn.classList.toggle("selected", parseInt(btn.dataset.val) <= val);
+  });
+}
+
+function submitRating(clubId) {
+  if (rateFormState.some(v => v === 0)) {
+    showToast("Please rate all categories");
+    return;
+  }
+  saveUserReview(clubId, rateFormState);
+  renderDetail(clubId);
+  showToast("Thanks for your rating!");
+}
+
+/* ═══════════════════════════════════════════════════
+   SCREEN 4: MY INTERESTS
+   ═══════════════════════════════════════════════════ */
+function renderInterests() {
+  document.getElementById("interests-back-btn").onclick = () => showScreen(previousScreen, previousScreen === "listings" ? { category: currentCategory } : undefined);
+
+  const container = document.getElementById("interests-content");
+  const savedClubs = clubs.filter(c => saved.includes(c.id));
+
+  if (savedClubs.length === 0) {
+    container.innerHTML = `
+      <div class="interests-header-area"><h2>My Interests</h2></div>
+      <div class="empty-state">
+        <p>No clubs saved yet.<br>Browse categories to find your community.</p>
+        <button class="browse-btn" onclick="showScreen('home')">Browse clubs</button>
+      </div>`;
+    return;
+  }
+
+  const listHTML = savedClubs.map(c => {
+    const avatar = c.imageUrl
+      ? `<img class="club-avatar" src="${c.imageUrl}" alt="" style="width:32px;height:32px;border-radius:6px;object-fit:cover;flex-shrink:0;background:#f1f1ef" onerror="this.outerHTML='<div class=\\'cat-dot ${dotClass(c.category)}\\'></div>'">`
+      : `<div class="cat-dot ${dotClass(c.category)}"></div>`;
+    return `<div class="saved-card">
+      ${avatar}
+      <div class="club-info" onclick="previousScreen='interests';showScreen('detail',{clubId:${c.id}})">
+        <div class="club-name">${c.name}</div>
+        <div class="club-meta">${c.category}${c.instagram ? ' · ' + c.instagram : ''}</div>
+      </div>
+      <button class="remove-btn" onclick="removeInterest(${c.id})">Remove</button>
+    </div>`;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="interests-header-area"><h2>My Interests</h2></div>
+    <div class="interests-count">${savedClubs.length} club${savedClubs.length !== 1 ? 's' : ''} saved</div>
+    ${listHTML}
+    <div style="margin-top:16px">
+      <button class="action-btn secondary" onclick="copyList()">Copy my list</button>
+      <button class="action-btn primary" onclick="showToast('Opening Google Calendar...')">Add to Google Calendar</button>
+    </div>
+  `;
+}
+
+function removeInterest(id) {
+  toggleSave(id);
+  renderInterests();
+  showToast("Club removed");
+}
+
+function copyList() {
+  const savedClubs = clubs.filter(c => saved.includes(c.id));
+  const text = savedClubs.map(c => {
+    const parts = [c.name];
+    if (c.instagram) parts.push(c.instagram);
+    if (c.email) parts.push(c.email);
+    return parts.join(" - ");
+  }).join("\n");
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(".action-btn.secondary");
+    btn.textContent = "Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy my list"; btn.classList.remove("copied"); }, 2000);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════ */
+renderHome();
+updateBadges();
+</script>
+</body>
+</html>
