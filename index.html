@@ -84,20 +84,21 @@ body {
 .saved-btn {
   position: relative;
   height: 32px;
-  border: none;
-  background: transparent;
+  border: 1px solid #e3e3e0;
+  background: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: 6px;
   font-size: 13px;
-  color: #91918e;
-  transition: background 0.1s;
+  font-weight: 500;
+  color: #37352f;
+  transition: all 0.1s;
   flex-shrink: 0;
 }
-.saved-btn:hover { background: #f1f1ef; }
+.saved-btn:hover { background: #f7f7f5; border-color: #d3d3d0; }
 
 .saved-badge {
   background: #eb5757;
@@ -116,7 +117,7 @@ body {
 
 /* ── Screen 1: Home ───────────────────────────────── */
 .home-hero {
-  padding: 40px 0 28px;
+  padding: 40px 0 12px;
 }
 .home-hero h1 {
   font-size: 32px;
@@ -193,32 +194,35 @@ body {
 .category-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 12px;
 }
 
 .category-card {
   border: none;
-  border-radius: 8px;
-  padding: 20px 16px;
-  text-align: left;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: right;
   cursor: pointer;
-  transition: background 0.1s;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  background: #f7f7f5;
+  justify-content: space-between;
+  min-height: 100px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  position: relative;
+  overflow: hidden;
 }
-.category-card:hover { background: #efefed; }
-.category-card:active { background: #e8e8e5; }
+.category-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+.category-card:active { transform: scale(0.97); }
 
-.category-card .cat-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-bottom: 4px;
+.category-card .name { font-size: 14px; font-weight: 600; color: #6b6b68; align-self: flex-start; }
+.category-card .cat-icon {
+  width: 64px;
+  height: 64px;
+  align-self: flex-end;
+  object-fit: contain;
+  margin: 0 -4px -4px 0;
 }
-.category-card .name { font-size: 15px; font-weight: 600; color: #37352f; }
-.category-card .count { font-size: 12px; color: #91918e; }
 
 /* Dot colors per category */
 .dot-academic    { background: #4daa57; }
@@ -752,7 +756,7 @@ a.connect-item, .connect-item {
         <span class="saved-badge hidden" id="badge-listings">0</span>
       </button>
     </div>
-    <div class="listings-header"><h2><span class="cat-dot" id="listings-dot"></span> <span id="listings-title"></span></h2></div>
+    <div class="listings-header"><h2><span id="listings-title"></span></h2></div>
     <div class="club-list" id="club-list"></div>
   </div>
 
@@ -809,14 +813,14 @@ clubs.forEach(c => {
 });
 
 const categories = [
-  { name:"Academic",    dot:"dot-academic" },
-  { name:"Engineering", dot:"dot-engineering" },
-  { name:"Arts",        dot:"dot-arts" },
-  { name:"Sports",      dot:"dot-sports" },
-  { name:"Cultural",    dot:"dot-cultural" },
-  { name:"Health",      dot:"dot-health" },
-  { name:"Tech",        dot:"dot-tech" },
-  { name:"Social",      dot:"dot-social" },
+  { name:"Academic",    dot:"dot-academic",    icon:"icons/undraw_education_3vwh.svg" },
+  { name:"Engineering", dot:"dot-engineering", icon:"icons/undraw_qa-engineers_kgp8.svg" },
+  { name:"Arts",        dot:"dot-arts",        icon:"icons/undraw_artist-at-work_yos7.svg" },
+  { name:"Sports",      dot:"dot-sports",      icon:"icons/undraw_greek-freak_p532.svg" },
+  { name:"Cultural",    dot:"dot-cultural",    icon:"icons/undraw_world_bdnk (1).svg" },
+  { name:"Health",      dot:"dot-health",      icon:"icons/undraw_medical-care_7m9g.svg" },
+  { name:"Tech",        dot:"dot-tech",        icon:"icons/undraw_programmer_raqr.svg" },
+  { name:"Social",      dot:"dot-social",      icon:"icons/undraw_group-selfie_uih0.svg" },
 ];
 
 const catColors = {
@@ -965,14 +969,24 @@ function updateBadges() {
 /* ═══════════════════════════════════════════════════
    SCREEN 1: HOME
    ═══════════════════════════════════════════════════ */
+const catInitials = { Academic:"Ac", Engineering:"En", Arts:"Ar", Sports:"Sp", Cultural:"Cu", Health:"He", Tech:"Te", Social:"So" };
+const catTints = {
+  Academic:    "rgba(77,170,87,0.1)",
+  Engineering: "rgba(74,144,217,0.1)",
+  Arts:        "rgba(235,87,87,0.1)",
+  Sports:      "rgba(46,170,220,0.1)",
+  Cultural:    "rgba(233,130,58,0.1)",
+  Health:      "rgba(224,111,139,0.1)",
+  Tech:        "rgba(144,101,176,0.1)",
+  Social:      "rgba(242,193,68,0.1)",
+};
+
 function renderHome() {
   const grid = document.getElementById("category-grid");
   grid.innerHTML = categories.map(cat => {
-    const count = clubs.filter(c => c.category === cat.name).length;
-    return `<button class="category-card" onclick="showScreen('listings',{category:'${cat.name}'})">
-      <div class="cat-dot ${cat.dot}"></div>
+    return `<button class="category-card" style="background:${catTints[cat.name]}" onclick="showScreen('listings',{category:'${cat.name}'})">
       <span class="name">${cat.name}</span>
-      <span class="count">${count} clubs</span>
+      <img class="cat-icon" src="${cat.icon}" alt="${cat.name}">
     </button>`;
   }).join("");
 }
@@ -1015,7 +1029,7 @@ function handleSearch() {
    ═══════════════════════════════════════════════════ */
 function renderListings() {
   document.getElementById("listings-title").textContent = currentCategory;
-  document.getElementById("listings-dot").className = "cat-dot " + dotClass(currentCategory);
+  document.getElementById("listings-title").style.color = "#6b6b68";
 
   const filtered = clubs.filter(c => c.category === currentCategory);
 
