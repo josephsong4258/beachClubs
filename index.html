@@ -4,39 +4,118 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>beachClubs</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
+:root {
+  --bg-top: #f7ebd7;
+  --bg-bottom: #ddeaf3;
+  --ink: #132432;
+  --ink-soft: #5e7080;
+  --surface-muted: rgba(246, 240, 230, 0.82);
+  --shadow-xl: 0 28px 60px rgba(19, 36, 50, 0.18);
+  --shadow-md: 0 12px 24px rgba(19, 36, 50, 0.08);
+  --brand-ink: #0d4f6d;
+  --brand-teal: #118a87;
+  --brand-gold: #ffc857;
+}
 /* ── Reset & Base ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f7f7f5;
-  color: #37352f;
+  min-height: 100vh;
+  padding: 24px 16px;
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 200, 87, 0.42), transparent 28%),
+    radial-gradient(circle at 100% 8%, rgba(17, 138, 135, 0.28), transparent 26%),
+    linear-gradient(180deg, #f7ebd7 0%, #f7f2e8 38%, #ddeaf3 100%);
+  color: #132432;
   -webkit-tap-highlight-color: transparent;
   font-size: 14px;
-  line-height: 1.5;
-}
-
-/* ── App Shell ────────────────────────────────────── */
-#app {
-  max-width: 420px;
-  margin: 0 auto;
-  min-height: 100vh;
-  background: #fff;
+  line-height: 1.55;
   position: relative;
   overflow-x: hidden;
 }
 
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+body::before {
+  width: 280px;
+  height: 280px;
+  left: -120px;
+  bottom: 8vh;
+  background: radial-gradient(circle, rgba(255, 200, 87, 0.14), transparent 72%);
+}
+
+body::after {
+  width: 300px;
+  height: 300px;
+  right: -120px;
+  top: 14vh;
+  background: radial-gradient(circle, rgba(13, 79, 109, 0.16), transparent 70%);
+}
+
+button, input, a { font: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ── App Shell ────────────────────────────────────── */
+#app {
+  max-width: 470px;
+  margin: 0 auto;
+  min-height: calc(100vh - 48px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(250, 247, 241, 0.66) 38%, rgba(242, 248, 252, 0.78));
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: clip;
+  border-radius: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(24px);
+}
+
+#app::before,
+#app::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+#app::before {
+  inset: 0 0 auto 0;
+  height: 320px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 200, 87, 0.24), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(17, 138, 135, 0.22), transparent 42%);
+}
+
+#app::after {
+  inset: auto -90px 140px auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(13, 79, 109, 0.16), transparent 72%);
+}
+
 .screen {
   display: none;
-  padding: 0 24px 32px;
-  animation: fadeIn 0.2s ease;
+  padding: 0 24px 36px;
+  animation: screenIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  z-index: 1;
 }
 .screen.active { display: block; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+@keyframes screenIn {
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -45,258 +124,578 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px 0;
+  gap: 12px;
+  padding: 18px 24px 18px;
   position: sticky;
   top: 0;
-  background: #fff;
-  z-index: 10;
+  margin: 0 -24px;
+  background: linear-gradient(180deg, rgba(249, 248, 245, 0.94) 0%, rgba(249, 248, 245, 0.72) 75%, rgba(249, 248, 245, 0));
+  backdrop-filter: blur(20px);
+  z-index: 12;
 }
 
 .header-left {
   display: flex;
   align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
+.header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 8px 16px rgba(19, 36, 50, 0.08);
+}
+
+.brand-orb {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand-gold), #ffd982 42%, var(--brand-teal));
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.28);
+}
+
+.brand-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+
 .back-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
   border: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.64);
   font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.1s;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   flex-shrink: 0;
-  color: #91918e;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 10px 18px rgba(19, 36, 50, 0.08);
 }
-.back-btn:hover { background: #f1f1ef; }
+.back-btn:hover { transform: translateY(-1px); }
 
 .header-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #91918e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5e7080;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .saved-btn {
   position: relative;
-  height: 32px;
-  border: 1px solid #e3e3e0;
-  background: #fff;
+  min-width: 94px;
+  height: 42px;
+  border: none;
+  background: rgba(255, 255, 255, 0.64);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 12px;
-  border-radius: 6px;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 999px;
   font-size: 13px;
-  font-weight: 500;
-  color: #37352f;
-  transition: all 0.1s;
+  font-weight: 700;
+  color: var(--ink);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
   flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 10px 18px rgba(19, 36, 50, 0.08);
 }
-.saved-btn:hover { background: #f7f7f5; border-color: #d3d3d0; }
+.saved-btn:hover { transform: translateY(-1px); }
 
-.saved-badge {
-  background: #eb5757;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
+.theme-btn {
+  min-width: 78px;
+  height: 42px;
+  border: none;
+  background: rgba(255, 255, 255, 0.64);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 5px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 10px 18px rgba(19, 36, 50, 0.08);
+}
+
+.theme-btn:hover { transform: translateY(-1px); }
+
+.saved-badge {
+  background: var(--brand-ink);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  box-shadow: 0 8px 16px rgba(13, 79, 109, 0.22);
 }
 .saved-badge.hidden { display: none; }
 
 /* ── Screen 1: Home ───────────────────────────────── */
 .home-hero {
-  padding: 40px 0 12px;
+  position: relative;
+  overflow: hidden;
+  padding: 28px 22px 24px;
+  border-radius: 32px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #0f5475 0%, #118a87 52%, #ffc857 148%);
+  box-shadow: var(--shadow-xl);
+  color: #f8fbff;
 }
+
+.home-hero::before,
+.home-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.home-hero::before {
+  inset: auto -40px -60px auto;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 68%);
+}
+
+.home-hero::after {
+  inset: 16px auto auto 60%;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 72%);
+}
+
+.hero-eyebrow {
+  position: relative;
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 251, 255, 0.82);
+}
+
 .home-hero h1 {
-  font-size: 32px;
+  position: relative;
+  margin-top: 18px;
+  max-width: 290px;
+  font-family: "Space Grotesk", "Manrope", sans-serif;
+  font-size: 42px;
   font-weight: 700;
-  color: #1a1a1a;
-  letter-spacing: -1.5px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #f8fbff;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
 }
 .home-hero h1 .gold {
-  color: #F0AB00;
+  color: #ffe29a;
+  display: block;
+}
+
+.home-hero p {
+  position: relative;
+  margin-top: 14px;
+  max-width: 285px;
+  font-size: 14px;
+  color: rgba(248, 251, 255, 0.84);
+}
+
+.hero-stats {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hero-stat {
+  padding: 12px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+.hero-stat strong {
+  display: block;
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.hero-stat span {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 251, 255, 0.74);
 }
 
 .search-wrap {
   position: relative;
-  margin-bottom: 28px;
+  margin: 22px 0 14px;
 }
+
+.search-wrap::before {
+  content: "Search";
+  position: absolute;
+  left: 18px;
+  top: 16px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(94, 112, 128, 0.72);
+  pointer-events: none;
+}
+
 .search-wrap input {
   width: 100%;
-  height: 36px;
-  border: 1px solid #e3e3e0;
-  border-radius: 6px;
-  padding: 0 12px;
-  font-size: 14px;
+  height: 64px;
+  border: none;
+  border-radius: 22px;
+  padding: 24px 18px 0;
+  font-size: 15px;
   outline: none;
-  background: #f7f7f5;
-  transition: border-color 0.15s, background 0.15s;
-  color: #37352f;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
-.search-wrap input::placeholder { color: #b4b4b0; }
-.search-wrap input:focus { border-color: #2eaadc; background: #fff; }
+.search-wrap input::placeholder { color: rgba(94, 112, 128, 0.72); }
+.search-wrap input:focus {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(17, 138, 135, 0.28), 0 18px 28px rgba(19, 36, 50, 0.14);
+  transform: translateY(-1px);
+}
+
+.section-heading { margin-bottom: 16px; }
 
 .section-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #91918e;
+  font-size: 11px;
+  font-weight: 800;
+  color: #5e7080;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
+  letter-spacing: 0.16em;
+}
+
+.section-copy {
+  margin-top: 6px;
+  max-width: 320px;
+  color: #5e7080;
 }
 
 /* Search results dropdown */
 .search-results {
   display: none;
-  margin-top: -20px;
-  margin-bottom: 28px;
-  border: 1px solid #e3e3e0;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+  padding: 8px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
 }
-.search-results.active { display: block; }
+.search-results.active {
+  display: block;
+  animation: screenIn 0.22s ease;
+}
 
 .search-result-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  padding: 12px;
   cursor: pointer;
-  transition: background 0.08s;
+  transition: background 0.18s ease, transform 0.18s ease;
   gap: 10px;
 }
-.search-result-item:hover { background: #f7f7f5; }
+.search-result-item:hover {
+  background: rgba(17, 138, 135, 0.08);
+  transform: translateX(2px);
+}
 
 .search-result-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(19, 36, 50, 0.08), rgba(255, 255, 255, 0.44));
 }
-.search-result-info { flex: 1; }
-.search-result-name { font-weight: 500; font-size: 14px; color: #37352f; }
-.search-result-cat { font-size: 12px; color: #91918e; }
+
+.search-result-dot .cat-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.42);
+}
+
+.search-result-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  object-fit: cover;
+  background: var(--surface-muted);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.search-result-info { flex: 1; min-width: 0; }
+.search-result-name { font-weight: 700; font-size: 14px; color: var(--ink); }
+.search-result-cat { font-size: 12px; color: #5e7080; margin-top: 2px; }
 
 .category-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .category-card {
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  text-align: right;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 100px;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   position: relative;
   overflow: hidden;
+  border: none;
+  border-radius: 28px;
+  padding: 18px;
+  min-height: 184px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), var(--shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.category-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-.category-card:active { transform: scale(0.97); }
 
-.category-card .name { font-size: 14px; font-weight: 600; color: #6b6b68; align-self: flex-start; }
+.category-card::before {
+  content: "";
+  position: absolute;
+  inset: -40px -10px auto auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 70%);
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 18px 30px rgba(19, 36, 50, 0.14);
+}
+
+.category-card:active { transform: scale(0.985); }
+
+.category-card-top {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.category-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+}
+
+.cat-icon-wrap {
+  width: 74px;
+  height: 74px;
+  border-radius: 22px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.36);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.category-copy {
+  position: relative;
+  margin-top: 18px;
+}
+
+.category-card .name {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  font-family: "Space Grotesk", "Manrope", sans-serif;
+}
+
+.category-desc {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5e7080;
+}
+
+.category-arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+
 .category-card .cat-icon {
-  width: 76px;
-  height: 76px;
-  align-self: flex-end;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  margin: -8px -14px -14px auto;
 }
 
 /* Dot colors per category */
-.dot-academic    { background: #4daa57; }
-.dot-sports      { background: #2eaadc; }
-.dot-arts        { background: #eb5757; }
-.dot-social      { background: #f2c144; }
-.dot-tech        { background: #9065b0; }
-.dot-cultural    { background: #e9823a; }
-.dot-engineering { background: #4a90d9; }
-.dot-health      { background: #e06f8b; }
+.dot-academic    { background: #2d8f68; }
+.dot-sports      { background: #14a7b8; }
+.dot-arts        { background: #df6a52; }
+.dot-social      { background: #d6a03e; }
+.dot-tech        { background: #4f6fd8; }
+.dot-cultural    { background: #c96a3c; }
+.dot-engineering { background: #2f7de1; }
+.dot-health      { background: #d6618d; }
 
 /* ── Screen 2: Listings ───────────────────────────── */
 .listings-header {
-  padding: 28px 0 4px;
+  padding: 18px 0 18px;
 }
+
+.listings-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5e7080;
+}
+
 .listings-header h2 {
-  font-size: 24px;
+  margin-top: 8px;
+  font-size: 34px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.05em;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  line-height: 0.95;
+  color: var(--ink);
+  font-family: "Space Grotesk", "Manrope", sans-serif;
 }
+
 .listings-header h2 .cat-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
   flex-shrink: 0;
+  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.listings-subtitle {
+  margin-top: 10px;
+  max-width: 340px;
+  color: #5e7080;
 }
 
 .listings-count {
   font-size: 12px;
-  color: #91918e;
-  padding: 8px 0 12px;
+  color: #5e7080;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 16px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.07);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
 .club-list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 14px;
 }
 
 .club-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 8px;
-  border-radius: 6px;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 24px;
   cursor: pointer;
-  transition: background 0.08s;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
-.club-card:hover { background: #f7f7f5; }
+.club-card:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 16px 28px rgba(19, 36, 50, 0.13);
+  background: rgba(255, 255, 255, 0.84);
+}
 
 .club-card .club-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
   object-fit: cover;
   flex-shrink: 0;
-  background: #f1f1ef;
+  background: var(--surface-muted);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
 }
 .club-card .club-avatar-placeholder {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, rgba(19, 36, 50, 0.08), rgba(255, 255, 255, 0.44));
 }
 .club-card .club-avatar-placeholder .cat-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.4);
 }
 .club-card .cat-dot {
   width: 8px;
@@ -306,27 +705,55 @@ body {
 }
 .club-card .club-info { flex: 1; min-width: 0; }
 .club-card .club-name {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 800;
+  font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #37352f;
+  color: var(--ink);
 }
 .club-card .club-meta {
   font-size: 12px;
-  color: #91918e;
+  color: #5e7080;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.club-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(17, 138, 135, 0.1);
+  color: var(--brand-ink);
+  font-weight: 700;
+}
+
+.club-chip.muted {
+  background: rgba(19, 36, 50, 0.06);
+  color: #5e7080;
 }
 .club-card .arrow {
-  color: #d3d3d0;
-  font-size: 13px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 138, 135, 0.1);
+  color: var(--brand-ink);
+  font-size: 17px;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
 .empty-list {
   text-align: center;
-  padding: 40px 16px;
-  color: #91918e;
+  padding: 26px 18px;
+  color: #5e7080;
   font-size: 14px;
 }
 
@@ -719,6 +1146,837 @@ a.connect-item, .connect-item {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
+.club-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.club-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 24px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.club-card:hover {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), 0 16px 28px rgba(19, 36, 50, 0.13);
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.club-card .club-avatar,
+.club-card .club-avatar-placeholder,
+.saved-card .club-avatar,
+.saved-card .club-avatar-placeholder {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+.club-card .club-avatar,
+.saved-card .club-avatar {
+  object-fit: cover;
+  background: var(--surface-muted);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.club-card .club-avatar-placeholder,
+.saved-card .club-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(19, 36, 50, 0.08), rgba(255, 255, 255, 0.44));
+}
+
+.club-card .club-avatar-placeholder .cat-dot,
+.saved-card .club-avatar-placeholder .cat-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.club-card .club-name,
+.saved-card .club-name {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.club-card .club-meta,
+.saved-card .club-meta {
+  font-size: 12px;
+  color: #5e7080;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.club-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(17, 138, 135, 0.1);
+  color: var(--brand-ink);
+  font-weight: 700;
+}
+
+.club-chip.muted {
+  background: rgba(19, 36, 50, 0.06);
+  color: #5e7080;
+}
+
+.club-card .arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(17, 138, 135, 0.1);
+  color: var(--brand-ink);
+  font-size: 17px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.detail-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 22px;
+  border-radius: 32px;
+  color: #f7fbff;
+  box-shadow: var(--shadow-xl);
+}
+
+.detail-hero::before,
+.detail-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.detail-hero::before {
+  inset: auto -60px -80px auto;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.24), transparent 70%);
+}
+
+.detail-hero::after {
+  inset: 22px auto auto 62%;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 72%);
+}
+
+.detail-kicker {
+  position: relative;
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(247, 251, 255, 0.84);
+}
+
+.detail-hero-head {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.detail-avatar,
+.detail-avatar-placeholder {
+  width: 78px;
+  height: 78px;
+  border-radius: 24px;
+  flex-shrink: 0;
+}
+
+.detail-avatar {
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.detail-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.detail-avatar-placeholder .cat-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 12px rgba(255, 255, 255, 0.12);
+}
+
+.detail-title-wrap h2 {
+  font-family: "Space Grotesk", "Manrope", sans-serif;
+  font-size: 34px;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+
+.detail-title-wrap p {
+  margin-top: 12px;
+  color: rgba(247, 251, 255, 0.82);
+}
+
+.detail-pill-row {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.detail-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  font-weight: 700;
+  color: #f7fbff;
+}
+
+.detail-panel {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.52), var(--shadow-md);
+}
+
+.panel-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5e7080;
+  margin-bottom: 14px;
+}
+
+.detail-desc {
+  color: #5e7080;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.ratings-section {
+  margin-top: 18px;
+}
+
+.ratings-overview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.ratings-big-score {
+  width: 88px;
+  height: 88px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 18px 28px rgba(19, 36, 50, 0.14);
+}
+
+.ratings-big-score .big-num {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+}
+
+.ratings-big-score .big-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.84);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.rating-count {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.rating-hint {
+  margin-top: 6px;
+  color: #5e7080;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-item {
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.06);
+}
+
+.metric-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5e7080;
+  margin-bottom: 10px;
+}
+
+.metric-score {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.rate-btn,
+.rate-submit,
+.interest-btn,
+.browse-btn,
+.remove-btn {
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.rate-btn:hover,
+.rate-submit:hover,
+.interest-btn:hover,
+.browse-btn:hover,
+.remove-btn:hover { transform: translateY(-1px); }
+
+.rate-btn {
+  width: 100%;
+  margin-top: 14px;
+  height: 46px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #0f5475, #118a87);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+}
+
+.rate-btn:hover {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+}
+
+.rate-form {
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.07);
+}
+
+.rate-form-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.rate-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.rate-field .rate-field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.rate-field .rate-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.rate-field .rate-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(19, 36, 50, 0.06);
+  color: #5e7080;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.06);
+}
+
+.rate-field .rate-dot:hover {
+  background: rgba(17, 138, 135, 0.16);
+  color: var(--brand-ink);
+}
+
+.rate-field .rate-dot.selected {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+  color: #fff;
+  box-shadow: none;
+}
+
+.rate-submit {
+  width: 100%;
+  height: 46px;
+  margin-top: 6px;
+  border-radius: 18px;
+  background: rgba(19, 36, 50, 0.92);
+  color: #fff;
+  font-weight: 800;
+}
+
+.rate-submit:hover {
+  background: rgba(19, 36, 50, 0.92);
+}
+
+.user-rated-note {
+  text-align: center;
+  font-size: 12px;
+  color: #5e7080;
+  margin-top: 14px;
+}
+
+.connect-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+a.connect-item,
+.connect-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.06);
+}
+
+.connect-item:hover {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.connect-item .connect-type {
+  min-width: 84px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5e7080;
+}
+
+.connect-item .connect-value {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connect-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(17, 138, 135, 0.1);
+  color: var(--brand-ink);
+  font-size: 15px;
+}
+
+.interest-btn {
+  width: 100%;
+  margin-top: 18px;
+  height: 50px;
+  border-radius: 20px;
+  font-weight: 800;
+}
+
+.interest-btn.save {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+  color: #fff;
+  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+}
+
+.interest-btn.save:hover {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+}
+
+.interest-btn.saved {
+  background: rgba(19, 36, 50, 0.08);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08);
+}
+
+.interest-btn.saved:hover {
+  background: rgba(19, 36, 50, 0.08);
+}
+
+.interests-header-area {
+  padding: 18px 0 14px;
+}
+
+.interests-header-area h2 {
+  font-family: "Space Grotesk", "Manrope", sans-serif;
+  font-size: 34px;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+}
+
+.interests-header-area p {
+  margin-top: 10px;
+  max-width: 330px;
+  color: #5e7080;
+}
+
+.interests-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.07);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5e7080;
+  margin-bottom: 16px;
+}
+
+.saved-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
+}
+
+.saved-card:hover {
+  background: rgba(255, 255, 255, 0.84);
+}
+
+.saved-card .club-info { cursor: pointer; }
+
+.remove-btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(220, 97, 80, 0.12);
+  color: #c55345;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.remove-btn:hover {
+  background: rgba(220, 97, 80, 0.18);
+  color: #c55345;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 22px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.52), var(--shadow-md);
+}
+
+.empty-state p {
+  color: #5e7080;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.browse-btn {
+  margin-top: 18px;
+  padding: 0 20px;
+  height: 46px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0f5475, #118a87);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+}
+
+.empty-state .browse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  height: 46px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0f5475, #118a87);
+  color: #fff;
+}
+
+.browse-btn:hover {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+}
+
+.empty-state .browse-btn:hover {
+  background: linear-gradient(135deg, #0f5475, #118a87);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(80px);
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(19, 36, 50, 0.96);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 20px 30px rgba(19, 36, 50, 0.22);
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+body.theme-dark {
+  color-scheme: dark;
+  --ink: #e8f1f6;
+  --ink-soft: #97acb8;
+  --surface-muted: rgba(27, 45, 58, 0.82);
+  --shadow-xl: 0 28px 60px rgba(0, 0, 0, 0.38);
+  --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.22);
+  --brand-ink: #9fddff;
+  --brand-teal: #45c0ba;
+  --brand-gold: #ffd277;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 195, 87, 0.14), transparent 28%),
+    radial-gradient(circle at 100% 8%, rgba(69, 192, 186, 0.14), transparent 26%),
+    linear-gradient(180deg, #07131d 0%, #0a1722 42%, #0d2130 100%);
+}
+
+body.theme-dark::before {
+  background: radial-gradient(circle, rgba(69, 192, 186, 0.14), transparent 72%);
+}
+
+body.theme-dark::after {
+  background: radial-gradient(circle, rgba(159, 221, 255, 0.12), transparent 70%);
+}
+
+body.theme-dark #app {
+  background: linear-gradient(180deg, rgba(9, 18, 27, 0.84), rgba(11, 21, 31, 0.82) 42%, rgba(12, 25, 38, 0.88));
+  border-color: rgba(159, 221, 255, 0.12);
+}
+
+body.theme-dark #app::before {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 210, 119, 0.1), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(69, 192, 186, 0.14), transparent 42%);
+}
+
+body.theme-dark #app::after {
+  background: radial-gradient(circle, rgba(159, 221, 255, 0.12), transparent 72%);
+}
+
+body.theme-dark .header {
+  background: linear-gradient(180deg, rgba(8, 15, 23, 0.96) 0%, rgba(8, 15, 23, 0.76) 75%, rgba(8, 15, 23, 0));
+}
+
+body.theme-dark .header-brand,
+body.theme-dark .back-btn,
+body.theme-dark .saved-btn,
+body.theme-dark .theme-btn {
+  background: rgba(9, 18, 27, 0.82);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.12), 0 10px 18px rgba(0, 0, 0, 0.24);
+}
+
+body.theme-dark .header-title,
+body.theme-dark .section-label,
+body.theme-dark .section-copy,
+body.theme-dark .search-result-cat,
+body.theme-dark .listings-eyebrow,
+body.theme-dark .listings-subtitle,
+body.theme-dark .rating-hint,
+body.theme-dark .panel-label,
+body.theme-dark .detail-desc,
+body.theme-dark .interests-header-area p,
+body.theme-dark .interests-count,
+body.theme-dark .empty-state p,
+body.theme-dark .club-card .club-meta,
+body.theme-dark .saved-card .club-meta,
+body.theme-dark .metric-name,
+body.theme-dark .connect-item .connect-type,
+body.theme-dark .search-wrap::before,
+body.theme-dark .user-rated-note {
+  color: var(--ink-soft);
+}
+
+body.theme-dark .home-hero {
+  background: linear-gradient(135deg, #081b29 0%, #0d4a56 56%, #8e6c26 148%);
+}
+
+body.theme-dark .search-wrap input {
+  background: rgba(9, 18, 27, 0.86);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.12), var(--shadow-md);
+}
+
+body.theme-dark .search-wrap input::placeholder {
+  color: rgba(151, 172, 184, 0.84);
+}
+
+body.theme-dark .search-results,
+body.theme-dark .club-card,
+body.theme-dark .detail-panel,
+body.theme-dark .metric-item,
+body.theme-dark .rate-form,
+body.theme-dark .connect-item,
+body.theme-dark .saved-card,
+body.theme-dark .empty-state {
+  background: rgba(9, 18, 27, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.08), 0 14px 24px rgba(0, 0, 0, 0.24);
+}
+
+body.theme-dark .category-card {
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.08), 0 14px 24px rgba(0, 0, 0, 0.24);
+}
+
+body.theme-dark .category-card::before {
+  background: radial-gradient(circle, rgba(159, 221, 255, 0.16), transparent 72%);
+}
+
+body.theme-dark .category-count,
+body.theme-dark .cat-icon-wrap,
+body.theme-dark .listings-count,
+body.theme-dark .club-chip.muted {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-soft);
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.08);
+}
+
+body.theme-dark .club-chip,
+body.theme-dark .club-card .arrow,
+body.theme-dark .connect-arrow {
+  background: rgba(69, 192, 186, 0.16);
+  color: #b8faf4;
+}
+
+body.theme-dark .saved-badge {
+  background: #45c0ba;
+  color: #041018;
+  box-shadow: none;
+}
+
+body.theme-dark .rate-field .rate-dot {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-soft);
+  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.08);
+}
+
+body.theme-dark .rate-submit {
+  background: rgba(232, 242, 247, 0.12);
+}
+
+body.theme-dark .rate-submit:hover {
+  background: rgba(232, 242, 247, 0.16);
+}
+
+body.theme-dark .interest-btn.saved {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink);
+}
+
+body.theme-dark .remove-btn {
+  background: rgba(220, 97, 80, 0.14);
+  color: #ff9e8f;
+}
+
+body.theme-dark .remove-btn:hover {
+  background: rgba(220, 97, 80, 0.22);
+  color: #ffb1a5;
+}
+
+body.theme-dark .toast {
+  background: rgba(232, 242, 247, 0.94);
+  color: #08131c;
+}
+
+@media (max-width: 420px) {
+  body { padding: 0; }
+
+  #app {
+    min-height: 100vh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .home-hero h1,
+  .detail-title-wrap h2,
+  .listings-header h2,
+  .interests-header-area h2 { font-size: 32px; }
+
+  .category-grid,
+  .metrics-grid,
+  .hero-stats { grid-template-columns: 1fr; }
+
+  .rate-field {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rate-field .rate-dots { justify-content: flex-start; }
+}
 </style>
 </head>
 <body>
@@ -727,20 +1985,47 @@ a.connect-item, .connect-item {
   <!-- Screen 1: Home -->
   <div id="screen-home" class="screen active">
     <div class="header">
-      <div class="header-left"></div>
-      <button class="saved-btn" onclick="showScreen('interests')">
-        Saved
-        <span class="saved-badge hidden" id="badge-home">0</span>
-      </button>
+      <div class="header-left">
+        <div class="header-brand">
+          <span class="brand-orb"></span>
+          <span class="brand-label">CSULB</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
+        <button class="saved-btn" onclick="showScreen('interests')">
+          Saved
+          <span class="saved-badge hidden" id="badge-home">0</span>
+        </button>
+      </div>
     </div>
     <div class="home-hero">
-      <h1><span class="gold">beach</span>Clubs</h1>
+      <div class="hero-eyebrow">CSULB club directory</div>
+      <h1>Find your <span class="gold">beach club.</span></h1>
+      <p>Explore student communities, compare vibes, and save the organizations you want to check out first.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong id="hero-club-count">0</strong>
+          <span>clubs</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="hero-category-count">0</strong>
+          <span>categories</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="hero-saved-count">0</strong>
+          <span>saved</span>
+        </div>
+      </div>
     </div>
     <div class="search-wrap">
       <input type="text" id="search-input" placeholder="Search clubs..." oninput="handleSearch()" />
     </div>
     <div class="search-results" id="search-results"></div>
-    <div class="section-label">Categories</div>
+    <div class="section-heading">
+      <div class="section-label">Explore by category</div>
+      <p class="section-copy">Jump into the communities that match your major, interests, and campus energy.</p>
+    </div>
     <div class="category-grid" id="category-grid"></div>
   </div>
 
@@ -751,12 +2036,15 @@ a.connect-item, .connect-item {
         <button class="back-btn" onclick="showScreen('home')">&#8592;</button>
         <span class="header-title" id="listings-breadcrumb">Categories</span>
       </div>
-      <button class="saved-btn" onclick="showScreen('interests')">
-        Saved
-        <span class="saved-badge hidden" id="badge-listings">0</span>
-      </button>
+      <div class="header-actions">
+        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
+        <button class="saved-btn" onclick="showScreen('interests')">
+          Saved
+          <span class="saved-badge hidden" id="badge-listings">0</span>
+        </button>
+      </div>
     </div>
-    <div class="listings-header"><h2><span id="listings-title"></span></h2></div>
+    <div class="listings-header" id="listings-header"></div>
     <div class="club-list" id="club-list"></div>
   </div>
 
@@ -767,10 +2055,13 @@ a.connect-item, .connect-item {
         <button class="back-btn" id="detail-back-btn">&#8592;</button>
         <span class="header-title" id="detail-breadcrumb"></span>
       </div>
-      <button class="saved-btn" onclick="showScreen('interests')">
-        Saved
-        <span class="saved-badge hidden" id="badge-detail">0</span>
-      </button>
+      <div class="header-actions">
+        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
+        <button class="saved-btn" onclick="showScreen('interests')">
+          Saved
+          <span class="saved-badge hidden" id="badge-detail">0</span>
+        </button>
+      </div>
     </div>
     <div id="detail-content"></div>
   </div>
@@ -780,12 +2071,15 @@ a.connect-item, .connect-item {
     <div class="header">
       <div class="header-left">
         <button class="back-btn" id="interests-back-btn">&#8592;</button>
-        <span class="header-title">Back</span>
+        <span class="header-title">Saved list</span>
       </div>
-      <button class="saved-btn" onclick="showScreen('interests')">
-        Saved
-        <span class="saved-badge hidden" id="badge-interests">0</span>
-      </button>
+      <div class="header-actions">
+        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
+        <button class="saved-btn" onclick="showScreen('interests')">
+          Saved
+          <span class="saved-badge hidden" id="badge-interests">0</span>
+        </button>
+      </div>
     </div>
     <div id="interests-content"></div>
   </div>
@@ -813,25 +2107,80 @@ clubs.forEach(c => {
 });
 
 const categories = [
-  { name:"Academic",    dot:"dot-academic",    icon:"icons/undraw_education_3vwh.svg" },
-  { name:"Engineering", dot:"dot-engineering", icon:"icons/undraw_qa-engineers_kgp8.svg" },
-  { name:"Arts",        dot:"dot-arts",        icon:"icons/undraw_artist-at-work_yos7.svg" },
-  { name:"Sports",      dot:"dot-sports",      icon:"icons/undraw_greek-freak_p532.svg" },
-  { name:"Cultural",    dot:"dot-cultural",    icon:"icons/undraw_world_bdnk (1).svg" },
-  { name:"Health",      dot:"dot-health",      icon:"icons/undraw_medical-care_7m9g.svg" },
-  { name:"Tech",        dot:"dot-tech",        icon:"icons/undraw_programmer_raqr.svg" },
-  { name:"Social",      dot:"dot-social",      icon:"icons/undraw_group-selfie_uih0.svg" },
+  { name: "Academic", icon: "icons/undraw_education_3vwh.svg" },
+  { name: "Engineering", icon: "icons/undraw_qa-engineers_kgp8.svg" },
+  { name: "Arts", icon: "icons/undraw_artist-at-work_yos7.svg" },
+  { name: "Sports", icon: "icons/undraw_greek-freak_p532.svg" },
+  { name: "Cultural", icon: "icons/undraw_world_bdnk (1).svg" },
+  { name: "Health", icon: "icons/undraw_medical-care_7m9g.svg" },
+  { name: "Tech", icon: "icons/undraw_programmer_raqr.svg" },
+  { name: "Social", icon: "icons/undraw_group-selfie_uih0.svg" }
 ];
 
 const catColors = {
-  Academic:    "#4daa57",
-  Sports:      "#2eaadc",
-  Arts:        "#eb5757",
-  Social:      "#f2c144",
-  Tech:        "#9065b0",
-  Cultural:    "#e9823a",
-  Engineering: "#4a90d9",
-  Health:      "#e06f8b",
+  Academic: "#2d8f68",
+  Sports: "#14a7b8",
+  Arts: "#df6a52",
+  Social: "#d6a03e",
+  Tech: "#4f6fd8",
+  Cultural: "#c96a3c",
+  Engineering: "#2f7de1",
+  Health: "#d6618d"
+};
+
+const catGradients = {
+  Academic: "linear-gradient(135deg, #176147 0%, #0d4f6d 100%)",
+  Engineering: "linear-gradient(135deg, #1759a6 0%, #0d4f6d 100%)",
+  Arts: "linear-gradient(135deg, #bf5137 0%, #8b3d2f 100%)",
+  Sports: "linear-gradient(135deg, #0d7f90 0%, #0d4f6d 100%)",
+  Cultural: "linear-gradient(135deg, #ae5b34 0%, #7f402a 100%)",
+  Health: "linear-gradient(135deg, #b84f79 0%, #7f3055 100%)",
+  Tech: "linear-gradient(135deg, #3253ba 0%, #18356f 100%)",
+  Social: "linear-gradient(135deg, #b07d1e 0%, #8d5d0e 100%)"
+};
+
+const catTints = {
+  Academic: "rgba(45, 143, 104, 0.18)",
+  Engineering: "rgba(47, 125, 225, 0.18)",
+  Arts: "rgba(223, 106, 82, 0.18)",
+  Sports: "rgba(20, 167, 184, 0.18)",
+  Cultural: "rgba(201, 106, 60, 0.18)",
+  Health: "rgba(214, 97, 141, 0.18)",
+  Tech: "rgba(79, 111, 216, 0.18)",
+  Social: "rgba(214, 160, 62, 0.18)"
+};
+
+const catTintsDark = {
+  Academic: "rgba(45, 143, 104, 0.22)",
+  Engineering: "rgba(47, 125, 225, 0.22)",
+  Arts: "rgba(223, 106, 82, 0.22)",
+  Sports: "rgba(20, 167, 184, 0.22)",
+  Cultural: "rgba(201, 106, 60, 0.22)",
+  Health: "rgba(214, 97, 141, 0.22)",
+  Tech: "rgba(79, 111, 216, 0.22)",
+  Social: "rgba(214, 160, 62, 0.22)"
+};
+
+const catTaglines = {
+  Academic: "Study groups, speaker events, and career momentum.",
+  Engineering: "Hands-on builds, competitions, and industry exposure.",
+  Arts: "Creative communities for makers, performers, and storytellers.",
+  Sports: "Club teams, active crews, and high-energy campus groups.",
+  Cultural: "Identity-based spaces, traditions, and shared community.",
+  Health: "Pre-health circles focused on service and preparation.",
+  Tech: "Projects, coding practice, and builders finding other builders.",
+  Social: "Service orgs, advocacy groups, and campus-life crews."
+};
+
+const catGradientsDark = {
+  Academic: "linear-gradient(135deg, #0a3529 0%, #082331 100%)",
+  Engineering: "linear-gradient(135deg, #0c2f58 0%, #081f31 100%)",
+  Arts: "linear-gradient(135deg, #5d2418 0%, #341915 100%)",
+  Sports: "linear-gradient(135deg, #093842 0%, #082331 100%)",
+  Cultural: "linear-gradient(135deg, #5f301f 0%, #341d17 100%)",
+  Health: "linear-gradient(135deg, #5b213e 0%, #321723 100%)",
+  Tech: "linear-gradient(135deg, #1e3181 0%, #111b49 100%)",
+  Social: "linear-gradient(135deg, #5c4514 0%, #33240a 100%)"
 };
 
 function dotClass(category) {
@@ -898,15 +2247,15 @@ function getClubRatings(club) {
 }
 
 function ratingColor(score) {
-  if (score >= 4.0) return "#4daa57";
-  if (score >= 3.0) return "#f2c144";
-  return "#eb5757";
+  if (score >= 4.0) return "#198f71";
+  if (score >= 3.0) return "#cf8d18";
+  return "#dc6150";
 }
 
 function metricColor(score) {
-  if (score >= 4.0) return "#4daa57";
-  if (score >= 3.0) return "#91918e";
-  return "#eb5757";
+  if (score >= 4.0) return "#198f71";
+  if (score >= 3.0) return "#5e7080";
+  return "#dc6150";
 }
 
 /* ═══════════════════════════════════════════════════
@@ -915,6 +2264,55 @@ function metricColor(score) {
 let saved = JSON.parse(localStorage.getItem("csulb_saved") || "[]");
 let currentCategory = null;
 let previousScreen = "home";
+let theme = getInitialTheme();
+
+function getInitialTheme() {
+  const storedTheme = localStorage.getItem("csulb_theme");
+  if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+  return "light";
+}
+
+function applyTheme(nextTheme, options = {}) {
+  theme = nextTheme === "dark" ? "dark" : "light";
+  document.body.classList.toggle("theme-dark", theme === "dark");
+  document.body.classList.toggle("theme-light", theme !== "dark");
+  localStorage.setItem("csulb_theme", theme);
+
+  const toggleLabel = theme === "dark" ? "Light" : "Dark";
+  document.querySelectorAll("[data-theme-toggle]").forEach(button => {
+    button.textContent = toggleLabel;
+    button.setAttribute("title", `Switch to ${toggleLabel.toLowerCase()} mode`);
+    button.setAttribute("aria-label", `Switch to ${toggleLabel.toLowerCase()} mode`);
+  });
+
+  if (options.rerender === false) return;
+
+  renderHome();
+
+  if (document.getElementById("screen-home").classList.contains("active")) {
+    const searchInput = document.getElementById("search-input");
+    if (searchInput && searchInput.value.trim()) handleSearch();
+  }
+
+  if (document.getElementById("screen-listings").classList.contains("active") && currentCategory) {
+    renderListings();
+  }
+
+  if (document.getElementById("screen-detail").classList.contains("active") && currentClubId !== null) {
+    renderDetail(currentClubId);
+  }
+
+  if (document.getElementById("screen-interests").classList.contains("active")) {
+    renderInterests();
+  }
+
+  updateBadges();
+}
+
+function toggleTheme() {
+  applyTheme(theme === "dark" ? "light" : "dark");
+}
 
 function persistSaved() {
   localStorage.setItem("csulb_saved", JSON.stringify(saved));
@@ -964,29 +2362,63 @@ function updateBadges() {
     b.textContent = count;
     b.classList.toggle("hidden", count === 0);
   });
+
+  const heroSaved = document.getElementById("hero-saved-count");
+  if (heroSaved) heroSaved.textContent = count;
 }
 
 /* ═══════════════════════════════════════════════════
    SCREEN 1: HOME
    ═══════════════════════════════════════════════════ */
-const catInitials = { Academic:"Ac", Engineering:"En", Arts:"Ar", Sports:"Sp", Cultural:"Cu", Health:"He", Tech:"Te", Social:"So" };
-const catTints = {
-  Academic:    "rgba(77,170,87,0.1)",
-  Engineering: "rgba(74,144,217,0.1)",
-  Arts:        "rgba(235,87,87,0.1)",
-  Sports:      "rgba(46,170,220,0.1)",
-  Cultural:    "rgba(233,130,58,0.1)",
-  Health:      "rgba(224,111,139,0.1)",
-  Tech:        "rgba(144,101,176,0.1)",
-  Social:      "rgba(242,193,68,0.1)",
-};
+function getCategoryCount(category) {
+  return clubs.filter(club => club.category === category).length;
+}
+
+function truncateText(text, maxLength) {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength - 3).trimEnd() + "...";
+}
+
+function clubPlaceholderMarkup(category, className = "club-avatar-placeholder") {
+  return `<div class='${className}'><div class='cat-dot ${dotClass(category)}'></div></div>`;
+}
+
+function clubAvatarMarkup(club, avatarClass = "club-avatar", placeholderClass = "club-avatar-placeholder") {
+  const fallback = clubPlaceholderMarkup(club.category, placeholderClass);
+  if (!club.imageUrl) return fallback;
+  return `<img class="${avatarClass}" src="${club.imageUrl}" alt="" onerror="this.outerHTML=\`${fallback}\`">`;
+}
+
+function searchThumbMarkup(club) {
+  const fallback = clubPlaceholderMarkup(club.category, "search-result-dot");
+  if (!club.imageUrl) return fallback;
+  return `<img class="search-result-thumb" src="${club.imageUrl}" alt="" onerror="this.outerHTML=\`${fallback}\`">`;
+}
 
 function renderHome() {
   const grid = document.getElementById("category-grid");
-  grid.innerHTML = categories.map(cat => {
-    return `<button class="category-card" style="background:${catTints[cat.name]}" onclick="showScreen('listings',{category:'${cat.name}'})">
-      <span class="name">${cat.name}</span>
-      <img class="cat-icon" src="${cat.icon}" alt="${cat.name}">
+
+  document.getElementById("hero-club-count").textContent = clubs.length;
+  document.getElementById("hero-category-count").textContent = categories.length;
+  document.getElementById("hero-saved-count").textContent = saved.length;
+
+  grid.innerHTML = categories.map(category => {
+    const count = getCategoryCount(category.name);
+    const background = theme === "dark"
+      ? `linear-gradient(180deg, rgba(9, 18, 27, 0.92), rgba(9, 18, 27, 0.78)), ${catTintsDark[category.name]}`
+      : `linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.48)), ${catTints[category.name]}`;
+    return `<button class="category-card" style="background:${background}" onclick="showScreen('listings',{category:'${category.name}'})">
+      <div class="category-card-top">
+        <span class="category-count">${count} clubs</span>
+        <div class="cat-icon-wrap">
+          <img class="cat-icon" src="${category.icon}" alt="${category.name}">
+        </div>
+      </div>
+      <div class="category-copy">
+        <span class="name">${category.name}</span>
+        <p class="category-desc">${catTaglines[category.name]}</p>
+      </div>
+      <span class="category-arrow">Explore</span>
     </button>`;
   }).join("");
 }
@@ -1005,15 +2437,13 @@ function handleSearch() {
   const results = clubs.filter(c => c.name.toLowerCase().includes(q)).slice(0, 12);
   if (results.length === 0) {
     container.classList.add("active");
-    container.innerHTML = '<div class="empty-list">No results</div>';
+    container.innerHTML = '<div class="empty-list">No clubs match that search yet.</div>';
     return;
   }
 
   container.classList.add("active");
   container.innerHTML = results.map(c => {
-    const thumb = c.imageUrl
-      ? `<img src="${c.imageUrl}" alt="" style="width:24px;height:24px;border-radius:4px;object-fit:cover;flex-shrink:0;background:#f1f1ef" onerror="this.outerHTML='<div class=\\'search-result-dot ${dotClass(c.category)}\\'></div>'">`
-      : `<div class="search-result-dot ${dotClass(c.category)}"></div>`;
+    const thumb = searchThumbMarkup(c);
     return `<div class="search-result-item" onclick="previousScreen='home';showScreen('detail',{clubId:${c.id}})">
       ${thumb}
       <div class="search-result-info">
@@ -1028,17 +2458,20 @@ function handleSearch() {
    SCREEN 2: LISTINGS
    ═══════════════════════════════════════════════════ */
 function renderListings() {
-  document.getElementById("listings-title").textContent = currentCategory;
-  document.getElementById("listings-title").style.color = "#6b6b68";
-
   const filtered = clubs.filter(c => c.category === currentCategory);
-
+  const header = document.getElementById("listings-header");
   const list = document.getElementById("club-list");
-  list.innerHTML = `<div class="listings-count">${filtered.length} organizations</div>` +
-    filtered.map(c => {
-      const avatar = c.imageUrl
-        ? `<img class="club-avatar" src="${c.imageUrl}" alt="" onerror="this.outerHTML='<div class=\\'club-avatar-placeholder\\'><div class=\\'cat-dot ${dotClass(c.category)}\\'></div></div>'">`
-        : `<div class="club-avatar-placeholder"><div class="cat-dot ${dotClass(c.category)}"></div></div>`;
+
+  header.innerHTML = `
+    <div class="listings-eyebrow">Category</div>
+    <h2><span class="cat-dot ${dotClass(currentCategory)}"></span>${currentCategory}</h2>
+    <p class="listings-subtitle">${catDescriptions[currentCategory]}</p>
+    <div class="listings-count">${filtered.length} organizations</div>
+  `;
+  list.innerHTML = filtered.length === 0
+    ? '<div class="empty-list">No organizations are available in this category yet.</div>'
+    : filtered.map(c => {
+      const avatar = clubAvatarMarkup(c);
       return `<div class="club-card" onclick="previousScreen='listings';showScreen('detail',{clubId:${c.id}})">
       ${avatar}
       <div class="club-info">
@@ -1255,6 +2688,232 @@ function removeInterest(id) {
 /* ═══════════════════════════════════════════════════
    TOAST
    ═══════════════════════════════════════════════════ */
+function renderListings() {
+  const filtered = clubs.filter(club => club.category === currentCategory);
+  const header = document.getElementById("listings-header");
+  const list = document.getElementById("club-list");
+
+  header.innerHTML = `
+    <div class="listings-eyebrow">Category</div>
+    <h2><span class="cat-dot ${dotClass(currentCategory)}"></span>${currentCategory}</h2>
+    <p class="listings-subtitle">${catDescriptions[currentCategory]}</p>
+    <div class="listings-count">${filtered.length} organizations</div>
+  `;
+
+  list.innerHTML = filtered.length === 0
+    ? '<div class="empty-list">No organizations are available in this category yet.</div>'
+    : filtered.map(club => `
+      <div class="club-card" onclick="previousScreen='listings';showScreen('detail',{clubId:${club.id}})">
+        ${clubAvatarMarkup(club)}
+        <div class="club-info">
+          <div class="club-name">${club.name}</div>
+          <div class="club-meta">
+            <span class="club-chip">${club.category}</span>
+            ${club.instagram ? `<span class="club-chip muted">${club.instagram}</span>` : ""}
+          </div>
+        </div>
+        <span class="arrow">&#8599;</span>
+      </div>
+    `).join("");
+}
+
+function renderDetail(id) {
+  currentClubId = id;
+  const club = clubs.find(item => item.id === id);
+  const alreadySaved = isSaved(id);
+  const ratings = getClubRatings(club);
+  const overall = Math.round((ratings.metrics.reduce((sum, value) => sum + value, 0) / 4) * 10) / 10;
+  const overallColor = ratingColor(overall);
+  const description = club.description || catDescriptions[club.category];
+  const heroCopy = truncateText(description, 165);
+  const heroGradient = (theme === "dark" ? catGradientsDark : catGradients)[club.category] || "linear-gradient(135deg, #0f5475 0%, #118a87 100%)";
+
+  document.getElementById("detail-breadcrumb").textContent = club.category;
+  document.getElementById("detail-back-btn").onclick = () => showScreen(
+    previousScreen,
+    previousScreen === "listings" ? { category: currentCategory } : undefined
+  );
+
+  let connectHTML = "";
+
+  if (club.instagram) {
+    connectHTML += `
+      <a class="connect-item" href="${club.socialMedia.instagram}" target="_blank" rel="noopener">
+        <span class="connect-type">Instagram</span>
+        <span class="connect-value">${club.instagram}</span>
+        <span class="connect-arrow">&#8599;</span>
+      </a>
+    `;
+  }
+
+  if (club.email) {
+    connectHTML += `
+      <a class="connect-item" href="mailto:${club.email}">
+        <span class="connect-type">Email</span>
+        <span class="connect-value">${club.email}</span>
+        <span class="connect-arrow">&#8599;</span>
+      </a>
+    `;
+  }
+
+  if (club.socialMedia && club.socialMedia.website) {
+    const domain = club.socialMedia.website.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    connectHTML += `
+      <a class="connect-item" href="${club.socialMedia.website}" target="_blank" rel="noopener">
+        <span class="connect-type">Website</span>
+        <span class="connect-value">${domain}</span>
+        <span class="connect-arrow">&#8599;</span>
+      </a>
+    `;
+  }
+
+  if (club.socialMedia && club.socialMedia.linkedin) {
+    connectHTML += `
+      <a class="connect-item" href="${club.socialMedia.linkedin}" target="_blank" rel="noopener">
+        <span class="connect-type">LinkedIn</span>
+        <span class="connect-value">View profile</span>
+        <span class="connect-arrow">&#8599;</span>
+      </a>
+    `;
+  }
+
+  if (club.socialMedia && club.socialMedia.discord) {
+    connectHTML += `
+      <a class="connect-item" href="${club.socialMedia.discord}" target="_blank" rel="noopener">
+        <span class="connect-type">Discord</span>
+        <span class="connect-value">Join server</span>
+        <span class="connect-arrow">&#8599;</span>
+      </a>
+    `;
+  }
+
+  connectHTML += `
+    <a class="connect-item" href="${club.clubPageUrl}" target="_blank" rel="noopener">
+      <span class="connect-type">BeachSync</span>
+      <span class="connect-value">View on BeachSync</span>
+      <span class="connect-arrow">&#8599;</span>
+    </a>
+  `;
+
+  document.getElementById("detail-content").innerHTML = `
+    <div class="detail-hero" style="background:${heroGradient}">
+      <span class="detail-kicker">${club.category}</span>
+      <div class="detail-hero-head">
+        ${clubAvatarMarkup(club, "detail-avatar", "detail-avatar-placeholder")}
+        <div class="detail-title-wrap">
+          <h2>${club.name}</h2>
+          <p>${heroCopy}</p>
+        </div>
+      </div>
+      <div class="detail-pill-row">
+        <span class="detail-pill">${overall}/5 overall</span>
+        <span class="detail-pill">${ratings.count} student ratings</span>
+        <span class="detail-pill">Open to all</span>
+      </div>
+    </div>
+
+    <div class="detail-panel">
+      <div class="panel-label">About</div>
+      <p class="detail-desc">${description}</p>
+    </div>
+
+    <div class="detail-panel ratings-section">
+      <div class="panel-label">Student ratings</div>
+      <div class="ratings-overview">
+        <div class="ratings-big-score" style="background:${overallColor}">
+          <span class="big-num">${overall}</span>
+          <span class="big-label">out of 5</span>
+        </div>
+        <div class="ratings-meta">
+          <div class="rating-count">${ratings.count} rating${ratings.count !== 1 ? "s" : ""}</div>
+          <div class="rating-hint">A blended snapshot of seeded scores and student submissions.</div>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        ${metricNames.map((name, index) => `
+          <div class="metric-item">
+            <span class="metric-name">${name}</span>
+            <span class="metric-score" style="color:${metricColor(ratings.metrics[index])}">${ratings.metrics[index]}</span>
+          </div>
+        `).join("")}
+      </div>
+      ${ratings.userRated
+        ? '<div class="user-rated-note">You already added your rating for this club.</div>'
+        : `<button class="rate-btn" onclick="showRateForm(${club.id})">Rate this club</button>`
+      }
+      <div id="rate-form-container"></div>
+    </div>
+
+    <div class="detail-panel">
+      <div class="panel-label">Connect</div>
+      <div class="connect-list">${connectHTML}</div>
+    </div>
+
+    <button class="interest-btn ${alreadySaved ? "saved" : "save"}" onclick="handleInterestClick(${club.id})">
+      ${alreadySaved ? "Saved to your list" : "Save to your list"}
+    </button>
+  `;
+}
+
+function handleInterestClick(id) {
+  toggleSave(id);
+  renderDetail(id);
+  showToast(isSaved(id) ? "Saved to your list" : "Removed from your list");
+}
+
+function renderInterests() {
+  document.getElementById("interests-back-btn").onclick = () => showScreen(
+    previousScreen,
+    previousScreen === "listings" ? { category: currentCategory } : undefined
+  );
+
+  const container = document.getElementById("interests-content");
+  const savedClubs = clubs.filter(club => saved.includes(club.id));
+
+  if (savedClubs.length === 0) {
+    container.innerHTML = `
+      <div class="interests-header-area">
+        <h2>Saved clubs</h2>
+        <p>Build a shortlist of organizations you want to revisit before the next involvement fair.</p>
+      </div>
+      <div class="empty-state">
+        <p>No clubs saved yet. Browse categories, compare options, and start building your list.</p>
+        <button class="browse-btn" onclick="showScreen('home')">Browse clubs</button>
+      </div>
+    `;
+    return;
+  }
+
+  const listHTML = savedClubs.map(club => `
+    <div class="saved-card">
+      ${clubAvatarMarkup(club)}
+      <div class="club-info" onclick="previousScreen='interests';showScreen('detail',{clubId:${club.id}})">
+        <div class="club-name">${club.name}</div>
+        <div class="club-meta">
+          <span class="club-chip">${club.category}</span>
+          ${club.instagram ? `<span class="club-chip muted">${club.instagram}</span>` : ""}
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removeInterest(${club.id})">Remove</button>
+    </div>
+  `).join("");
+
+  container.innerHTML = `
+    <div class="interests-header-area">
+      <h2>Saved clubs</h2>
+      <p>Keep a polished shortlist of the communities you want to visit, message, or join next.</p>
+    </div>
+    <div class="interests-count">${savedClubs.length} club${savedClubs.length !== 1 ? "s" : ""} saved</div>
+    ${listHTML}
+  `;
+}
+
+function removeInterest(id) {
+  toggleSave(id);
+  renderInterests();
+  showToast("Removed from saved clubs");
+}
+
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById("toast");
@@ -1267,6 +2926,7 @@ function showToast(msg) {
 /* ═══════════════════════════════════════════════════
    INIT
    ═══════════════════════════════════════════════════ */
+applyTheme(theme, { rerender: false });
 renderHome();
 updateBadges();
 </script>
