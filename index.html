@@ -7,16 +7,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
 :root {
-  --bg-top: #f7ebd7;
-  --bg-bottom: #ddeaf3;
+  --bg-top: #f9f3e5;
+  --bg-bottom: #f0ece3;
   --ink: #132432;
   --ink-soft: #5e7080;
   --surface-muted: rgba(246, 240, 230, 0.82);
   --shadow-xl: 0 28px 60px rgba(19, 36, 50, 0.18);
   --shadow-md: 0 12px 24px rgba(19, 36, 50, 0.08);
-  --brand-ink: #0d4f6d;
-  --brand-teal: #118a87;
-  --brand-gold: #ffc857;
+  --brand-ink: #1a1a1a;
+  --brand-teal: #eba91b;
+  --brand-gold: #eba91b;
 }
 /* ── Reset & Base ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,9 +28,9 @@ body {
   padding: 24px 16px;
   font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background:
-    radial-gradient(circle at 12% 0%, rgba(255, 200, 87, 0.42), transparent 28%),
-    radial-gradient(circle at 100% 8%, rgba(17, 138, 135, 0.28), transparent 26%),
-    linear-gradient(180deg, #f7ebd7 0%, #f7f2e8 38%, #ddeaf3 100%);
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.42), transparent 28%),
+    radial-gradient(circle at 100% 8%, rgba(255, 255, 255, 0.28), transparent 26%),
+    linear-gradient(180deg, #f5f4f2 0%, #f5f4f2 38%, #f5f4f2 100%);
   color: #132432;
   -webkit-tap-highlight-color: transparent;
   font-size: 14px;
@@ -53,7 +53,7 @@ body::before {
   height: 280px;
   left: -120px;
   bottom: 8vh;
-  background: radial-gradient(circle, rgba(255, 200, 87, 0.14), transparent 72%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14), transparent 72%);
 }
 
 body::after {
@@ -61,7 +61,7 @@ body::after {
   height: 300px;
   right: -120px;
   top: 14vh;
-  background: radial-gradient(circle, rgba(13, 79, 109, 0.16), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 70%);
 }
 
 button, input, a { font: inherit; }
@@ -93,8 +93,8 @@ img { display: block; max-width: 100%; }
   inset: 0 0 auto 0;
   height: 320px;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 200, 87, 0.24), transparent 36%),
-    radial-gradient(circle at 82% 0%, rgba(17, 138, 135, 0.22), transparent 42%);
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.24), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(255, 255, 255, 0.22), transparent 42%);
 }
 
 #app::after {
@@ -161,7 +161,7 @@ img { display: block; max-width: 100%; }
   width: 12px;
   height: 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand-gold), #ffd982 42%, var(--brand-teal));
+  background: linear-gradient(135deg, #eba91b 0%, #eba91b 50%, #1a1a1a 50%);
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.28);
 }
 
@@ -268,7 +268,7 @@ img { display: block; max-width: 100%; }
   padding: 28px 22px 24px;
   border-radius: 32px;
   margin-top: 6px;
-  background: linear-gradient(135deg, #0f5475 0%, #118a87 52%, #ffc857 148%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%);
   box-shadow: var(--shadow-xl);
   color: #f8fbff;
 }
@@ -281,10 +281,7 @@ img { display: block; max-width: 100%; }
 }
 
 .home-hero::before {
-  inset: auto -40px -60px auto;
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 68%);
+  display: none;
 }
 
 .home-hero::after {
@@ -320,7 +317,7 @@ img { display: block; max-width: 100%; }
   letter-spacing: -0.05em;
 }
 .home-hero h1 .gold {
-  color: #ffe29a;
+  color: #eba91b;
   display: block;
 }
 
@@ -366,41 +363,61 @@ img { display: block; max-width: 100%; }
 
 .search-wrap {
   position: relative;
-  margin: 22px 0 14px;
+  margin: 24px 0 20px;
 }
 
-.search-wrap::before {
-  content: "Search";
+.search-icon {
   position: absolute;
-  left: 18px;
-  top: 16px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(94, 112, 128, 0.72);
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: rgba(94, 112, 128, 0.68);
   pointer-events: none;
 }
 
 .search-wrap input {
   width: 100%;
-  height: 64px;
-  border: none;
-  border-radius: 22px;
-  padding: 24px 18px 0;
+  height: 44px;
+  border: 1.5px solid rgba(19, 36, 50, 0.16);
+  border-radius: 12px;
+  padding: 0 40px 0 40px;
   font-size: 15px;
   outline: none;
-  background: rgba(255, 255, 255, 0.78);
-  color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(19, 36, 50, 0.08), var(--shadow-md);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-}
-.search-wrap input::placeholder { color: rgba(94, 112, 128, 0.72); }
-.search-wrap input:focus {
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: inset 0 0 0 1px rgba(17, 138, 135, 0.28), 0 18px 28px rgba(19, 36, 50, 0.14);
-  transform: translateY(-1px);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(19, 36, 50, 0.06);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
+.search-wrap input::placeholder { color: rgba(94, 112, 128, 0.56); }
+.search-wrap input:focus {
+  background: #fff;
+  border-color: rgba(19, 36, 50, 0.5);
+  box-shadow: 0 0 0 3px rgba(19, 36, 50, 0.1), 0 1px 3px rgba(19, 36, 50, 0.06);
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(94, 112, 128, 0.12);
+  color: rgba(94, 112, 128, 0.8);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.search-clear:hover { background: rgba(94, 112, 128, 0.22); }
+.search-clear.hidden { display: none; }
 
 .section-heading { margin-bottom: 16px; }
 
@@ -441,7 +458,7 @@ img { display: block; max-width: 100%; }
   gap: 10px;
 }
 .search-result-item:hover {
-  background: rgba(17, 138, 135, 0.08);
+  background: rgba(19, 36, 50, 0.08);
   transform: translateX(2px);
 }
 
@@ -527,22 +544,23 @@ img { display: block; max-width: 100%; }
   gap: 6px;
   padding: 8px 10px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
   text-transform: uppercase;
   background: rgba(255, 255, 255, 0.55);
   color: var(--ink);
 }
 
 .cat-icon-wrap {
-  width: 74px;
-  height: 74px;
+  width: 88px;
+  height: 88px;
   border-radius: 22px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.36);
-  backdrop-filter: blur(12px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+  padding: 0;
+  background: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 .category-copy {
@@ -727,7 +745,7 @@ img { display: block; max-width: 100%; }
   align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(17, 138, 135, 0.1);
+  background: rgba(19, 36, 50, 0.1);
   color: var(--brand-ink);
   font-weight: 700;
 }
@@ -737,16 +755,13 @@ img { display: block; max-width: 100%; }
   color: #5e7080;
 }
 .club-card .arrow {
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 138, 135, 0.1);
-  color: var(--brand-ink);
-  font-size: 17px;
-  font-weight: 700;
+  background: none;
+  color: rgba(94, 112, 128, 0.4);
+  font-size: 20px;
+  font-weight: 400;
   flex-shrink: 0;
 }
 
@@ -1017,7 +1032,7 @@ a.connect-item, .connect-item {
   background: #2eaadc;
   color: #fff;
 }
-.interest-btn.save:hover { background: #2898c5; }
+.interest-btn.save:hover { background: #333333; }
 
 .interest-btn.saved {
   background: #f1f1ef;
@@ -1094,7 +1109,7 @@ a.connect-item, .connect-item {
   cursor: pointer;
   transition: background 0.1s;
 }
-.empty-state .browse-btn:hover { background: #2898c5; }
+.empty-state .browse-btn:hover { background: #333333; }
 
 .action-btn {
   width: 100%;
@@ -1226,7 +1241,7 @@ a.connect-item, .connect-item {
   align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(17, 138, 135, 0.1);
+  background: rgba(19, 36, 50, 0.1);
   color: var(--brand-ink);
   font-weight: 700;
 }
@@ -1237,16 +1252,13 @@ a.connect-item, .connect-item {
 }
 
 .club-card .arrow {
-  width: 38px;
-  height: 38px;
-  border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(17, 138, 135, 0.1);
-  color: var(--brand-ink);
-  font-size: 17px;
-  font-weight: 700;
+  background: none;
+  color: rgba(94, 112, 128, 0.4);
+  font-size: 20px;
+  font-weight: 400;
   flex-shrink: 0;
 }
 
@@ -1484,14 +1496,14 @@ a.connect-item, .connect-item {
   margin-top: 14px;
   height: 46px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
   color: #fff;
   font-weight: 800;
-  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+  box-shadow: 0 16px 24px rgba(19, 36, 50, 0.22);
 }
 
 .rate-btn:hover {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
 }
 
 .rate-form {
@@ -1543,12 +1555,12 @@ a.connect-item, .connect-item {
 }
 
 .rate-field .rate-dot:hover {
-  background: rgba(17, 138, 135, 0.16);
+  background: rgba(19, 36, 50, 0.16);
   color: var(--brand-ink);
 }
 
 .rate-field .rate-dot.selected {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
   color: #fff;
   box-shadow: none;
 }
@@ -1623,7 +1635,7 @@ a.connect-item,
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(17, 138, 135, 0.1);
+  background: rgba(19, 36, 50, 0.1);
   color: var(--brand-ink);
   font-size: 15px;
 }
@@ -1637,13 +1649,13 @@ a.connect-item,
 }
 
 .interest-btn.save {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
   color: #fff;
-  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+  box-shadow: 0 16px 24px rgba(19, 36, 50, 0.22);
 }
 
 .interest-btn.save:hover {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
 }
 
 .interest-btn.saved {
@@ -1740,10 +1752,10 @@ a.connect-item,
   padding: 0 20px;
   height: 46px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
   color: #fff;
   font-weight: 800;
-  box-shadow: 0 16px 24px rgba(17, 138, 135, 0.22);
+  box-shadow: 0 16px 24px rgba(19, 36, 50, 0.22);
 }
 
 .empty-state .browse-btn {
@@ -1753,16 +1765,16 @@ a.connect-item,
   padding: 0 20px;
   height: 46px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
   color: #fff;
 }
 
 .browse-btn:hover {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
 }
 
 .empty-state .browse-btn:hover {
-  background: linear-gradient(135deg, #0f5475, #118a87);
+  background: linear-gradient(135deg, #1a1a1a, #3d3428);
 }
 
 .toast {
@@ -1795,36 +1807,36 @@ body.theme-dark {
   --surface-muted: rgba(27, 45, 58, 0.82);
   --shadow-xl: 0 28px 60px rgba(0, 0, 0, 0.38);
   --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.22);
-  --brand-ink: #9fddff;
-  --brand-teal: #45c0ba;
-  --brand-gold: #ffd277;
+  --brand-ink: #eba91b;
+  --brand-teal: #eba91b;
+  --brand-gold: #eba91b;
   background:
-    radial-gradient(circle at 12% 0%, rgba(255, 195, 87, 0.14), transparent 28%),
-    radial-gradient(circle at 100% 8%, rgba(69, 192, 186, 0.14), transparent 26%),
+    radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.06), transparent 28%),
+    radial-gradient(circle at 100% 8%, rgba(255, 255, 255, 0.04), transparent 26%),
     linear-gradient(180deg, #07131d 0%, #0a1722 42%, #0d2130 100%);
 }
 
 body.theme-dark::before {
-  background: radial-gradient(circle, rgba(69, 192, 186, 0.14), transparent 72%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 72%);
 }
 
 body.theme-dark::after {
-  background: radial-gradient(circle, rgba(159, 221, 255, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
 }
 
 body.theme-dark #app {
   background: linear-gradient(180deg, rgba(9, 18, 27, 0.84), rgba(11, 21, 31, 0.82) 42%, rgba(12, 25, 38, 0.88));
-  border-color: rgba(159, 221, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 body.theme-dark #app::before {
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 210, 119, 0.1), transparent 36%),
-    radial-gradient(circle at 82% 0%, rgba(69, 192, 186, 0.14), transparent 42%);
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.04), transparent 36%),
+    radial-gradient(circle at 82% 0%, rgba(255, 255, 255, 0.03), transparent 42%);
 }
 
 body.theme-dark #app::after {
-  background: radial-gradient(circle, rgba(159, 221, 255, 0.12), transparent 72%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 72%);
 }
 
 body.theme-dark .header {
@@ -1837,7 +1849,7 @@ body.theme-dark .saved-btn,
 body.theme-dark .theme-btn {
   background: rgba(9, 18, 27, 0.82);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.12), 0 10px 18px rgba(0, 0, 0, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 18px rgba(0, 0, 0, 0.24);
 }
 
 body.theme-dark .header-title,
@@ -1856,23 +1868,32 @@ body.theme-dark .club-card .club-meta,
 body.theme-dark .saved-card .club-meta,
 body.theme-dark .metric-name,
 body.theme-dark .connect-item .connect-type,
-body.theme-dark .search-wrap::before,
 body.theme-dark .user-rated-note {
   color: var(--ink-soft);
 }
 
 body.theme-dark .home-hero {
-  background: linear-gradient(135deg, #081b29 0%, #0d4a56 56%, #8e6c26 148%);
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%);
 }
 
 body.theme-dark .search-wrap input {
   background: rgba(9, 18, 27, 0.86);
+  border-color: rgba(19, 36, 50, 0.18);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px rgba(159, 221, 255, 0.12), var(--shadow-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+body.theme-dark .search-wrap input:focus {
+  border-color: rgba(19, 36, 50, 0.6);
+  box-shadow: 0 0 0 3px rgba(19, 36, 50, 0.15), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 body.theme-dark .search-wrap input::placeholder {
-  color: rgba(151, 172, 184, 0.84);
+  color: rgba(151, 172, 184, 0.64);
+}
+
+body.theme-dark .search-icon {
+  color: rgba(151, 172, 184, 0.64);
 }
 
 body.theme-dark .search-results,
@@ -1896,7 +1917,6 @@ body.theme-dark .category-card::before {
 }
 
 body.theme-dark .category-count,
-body.theme-dark .cat-icon-wrap,
 body.theme-dark .listings-count,
 body.theme-dark .club-chip.muted {
   background: rgba(255, 255, 255, 0.08);
@@ -1905,15 +1925,19 @@ body.theme-dark .club-chip.muted {
 }
 
 body.theme-dark .club-chip,
-body.theme-dark .club-card .arrow,
 body.theme-dark .connect-arrow {
-  background: rgba(69, 192, 186, 0.16);
-  color: #b8faf4;
+  background: rgba(19, 36, 50, 0.16);
+  color: #eba91b;
+}
+
+body.theme-dark .club-card .arrow {
+  background: none;
+  color: rgba(151, 172, 184, 0.4);
 }
 
 body.theme-dark .saved-badge {
-  background: #45c0ba;
-  color: #041018;
+  background: #eba91b;
+  color: #1a1a1a;
   box-shadow: none;
 }
 
@@ -2003,28 +2027,16 @@ body.theme-dark .toast {
       <div class="hero-eyebrow">CSULB club directory</div>
       <h1>Find your <span class="gold">beach club.</span></h1>
       <p>Explore student communities, compare vibes, and save the organizations you want to check out first.</p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <strong id="hero-club-count">0</strong>
-          <span>clubs</span>
-        </div>
-        <div class="hero-stat">
-          <strong id="hero-category-count">0</strong>
-          <span>categories</span>
-        </div>
-        <div class="hero-stat">
-          <strong id="hero-saved-count">0</strong>
-          <span>saved</span>
-        </div>
-      </div>
     </div>
     <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" id="search-input" placeholder="Search clubs..." oninput="handleSearch()" />
+      <button class="search-clear hidden" id="search-clear" onclick="clearSearch()" aria-label="Clear search">&times;</button>
     </div>
     <div class="search-results" id="search-results"></div>
     <div class="section-heading">
       <div class="section-label">Explore by category</div>
-      <p class="section-copy">Jump into the communities that match your major, interests, and campus energy.</p>
+        <p class="section-copy">Jump into the communities that match your major, interests, and campus energy.</p>
     </div>
     <div class="category-grid" id="category-grid"></div>
   </div>
@@ -2037,7 +2049,6 @@ body.theme-dark .toast {
         <span class="header-title" id="listings-breadcrumb">Categories</span>
       </div>
       <div class="header-actions">
-        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
         <button class="saved-btn" onclick="showScreen('interests')">
           Saved
           <span class="saved-badge hidden" id="badge-listings">0</span>
@@ -2056,7 +2067,6 @@ body.theme-dark .toast {
         <span class="header-title" id="detail-breadcrumb"></span>
       </div>
       <div class="header-actions">
-        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
         <button class="saved-btn" onclick="showScreen('interests')">
           Saved
           <span class="saved-badge hidden" id="badge-detail">0</span>
@@ -2074,7 +2084,6 @@ body.theme-dark .toast {
         <span class="header-title">Saved list</span>
       </div>
       <div class="header-actions">
-        <button class="theme-btn" data-theme-toggle onclick="toggleTheme()">Dark</button>
         <button class="saved-btn" onclick="showScreen('interests')">
           Saved
           <span class="saved-badge hidden" id="badge-interests">0</span>
@@ -2129,14 +2138,14 @@ const catColors = {
 };
 
 const catGradients = {
-  Academic: "linear-gradient(135deg, #176147 0%, #0d4f6d 100%)",
-  Engineering: "linear-gradient(135deg, #1759a6 0%, #0d4f6d 100%)",
-  Arts: "linear-gradient(135deg, #bf5137 0%, #8b3d2f 100%)",
-  Sports: "linear-gradient(135deg, #0d7f90 0%, #0d4f6d 100%)",
-  Cultural: "linear-gradient(135deg, #ae5b34 0%, #7f402a 100%)",
-  Health: "linear-gradient(135deg, #b84f79 0%, #7f3055 100%)",
-  Tech: "linear-gradient(135deg, #3253ba 0%, #18356f 100%)",
-  Social: "linear-gradient(135deg, #b07d1e 0%, #8d5d0e 100%)"
+  Academic: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Engineering: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Arts: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Sports: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Cultural: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Health: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Tech: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)",
+  Social: "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)"
 };
 
 const catTints = {
@@ -2173,14 +2182,14 @@ const catTaglines = {
 };
 
 const catGradientsDark = {
-  Academic: "linear-gradient(135deg, #0a3529 0%, #082331 100%)",
-  Engineering: "linear-gradient(135deg, #0c2f58 0%, #081f31 100%)",
-  Arts: "linear-gradient(135deg, #5d2418 0%, #341915 100%)",
-  Sports: "linear-gradient(135deg, #093842 0%, #082331 100%)",
-  Cultural: "linear-gradient(135deg, #5f301f 0%, #341d17 100%)",
-  Health: "linear-gradient(135deg, #5b213e 0%, #321723 100%)",
-  Tech: "linear-gradient(135deg, #1e3181 0%, #111b49 100%)",
-  Social: "linear-gradient(135deg, #5c4514 0%, #33240a 100%)"
+  Academic: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Engineering: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Arts: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Sports: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Cultural: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Health: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Tech: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)",
+  Social: "linear-gradient(135deg, #111111 0%, #1a1a1a 52%, #3d3428 120%)"
 };
 
 function dotClass(category) {
@@ -2202,7 +2211,7 @@ const catDescriptions = {
 /* ═══════════════════════════════════════════════════
    RATINGS — deterministic seed + user reviews
    ═══════════════════════════════════════════════════ */
-const metricNames = ["Active", "Inclusive", "Social Community", "Competitiveness"];
+const metricNames = ["Active", "Inclusive", "Social Community", "Organized"];
 
 function hashName(name) {
   let h = 0;
@@ -2363,8 +2372,6 @@ function updateBadges() {
     b.classList.toggle("hidden", count === 0);
   });
 
-  const heroSaved = document.getElementById("hero-saved-count");
-  if (heroSaved) heroSaved.textContent = count;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2398,9 +2405,6 @@ function searchThumbMarkup(club) {
 function renderHome() {
   const grid = document.getElementById("category-grid");
 
-  document.getElementById("hero-club-count").textContent = clubs.length;
-  document.getElementById("hero-category-count").textContent = categories.length;
-  document.getElementById("hero-saved-count").textContent = saved.length;
 
   grid.innerHTML = categories.map(category => {
     const count = getCategoryCount(category.name);
@@ -2424,9 +2428,18 @@ function renderHome() {
 }
 
 /* Search */
+function clearSearch() {
+  const input = document.getElementById("search-input");
+  input.value = "";
+  document.getElementById("search-clear").classList.add("hidden");
+  handleSearch();
+  input.focus();
+}
+
 function handleSearch() {
   const q = document.getElementById("search-input").value.trim().toLowerCase();
   const container = document.getElementById("search-results");
+  document.getElementById("search-clear").classList.toggle("hidden", !q);
 
   if (!q) {
     container.classList.remove("active");
@@ -2464,19 +2477,21 @@ function renderListings() {
 
   header.innerHTML = `
     <div class="listings-eyebrow">Category</div>
-    <h2><span class="cat-dot ${dotClass(currentCategory)}"></span>${currentCategory}</h2>
+    <h2>${currentCategory}</h2>
     <p class="listings-subtitle">${catDescriptions[currentCategory]}</p>
-    <div class="listings-count">${filtered.length} organizations</div>
+    <div class="listings-count">${filtered.length} clubs</div>
   `;
   list.innerHTML = filtered.length === 0
     ? '<div class="empty-list">No organizations are available in this category yet.</div>'
     : filtered.map(c => {
       const avatar = clubAvatarMarkup(c);
+      const ratings = getClubRatings(c);
+      const overall = (ratings.metrics.reduce((a, b) => a + b, 0) / ratings.metrics.length).toFixed(1);
       return `<div class="club-card" onclick="previousScreen='listings';showScreen('detail',{clubId:${c.id}})">
       ${avatar}
       <div class="club-info">
         <div class="club-name">${c.name}</div>
-        <div class="club-meta">${c.category}${c.instagram ? ' · ' + c.instagram : ''}</div>
+        <div class="club-meta">${overall}/5 · ${ratings.count} ratings</div>
       </div>
       <span class="arrow">&#8250;</span>
     </div>`;
@@ -2554,7 +2569,6 @@ function renderDetail(id) {
       <span class="tag cat-tag" style="background:${color}">${c.category}</span>
       <span class="tag">Open to all</span>
     </div>
-    <p class="detail-desc">${desc}</p>
     <div class="ratings-section">
       <div class="ratings-label">Ratings</div>
       <div class="ratings-overview">
@@ -2695,26 +2709,29 @@ function renderListings() {
 
   header.innerHTML = `
     <div class="listings-eyebrow">Category</div>
-    <h2><span class="cat-dot ${dotClass(currentCategory)}"></span>${currentCategory}</h2>
+    <h2>${currentCategory}</h2>
     <p class="listings-subtitle">${catDescriptions[currentCategory]}</p>
     <div class="listings-count">${filtered.length} organizations</div>
   `;
 
   list.innerHTML = filtered.length === 0
     ? '<div class="empty-list">No organizations are available in this category yet.</div>'
-    : filtered.map(club => `
+    : filtered.map(club => {
+      const r = getClubRatings(club);
+      const ov = (r.metrics.reduce((a, b) => a + b, 0) / r.metrics.length).toFixed(1);
+      return `
       <div class="club-card" onclick="previousScreen='listings';showScreen('detail',{clubId:${club.id}})">
         ${clubAvatarMarkup(club)}
         <div class="club-info">
           <div class="club-name">${club.name}</div>
           <div class="club-meta">
             <span class="club-chip">${club.category}</span>
-            ${club.instagram ? `<span class="club-chip muted">${club.instagram}</span>` : ""}
+            <span class="club-chip muted">${ov}/5 · ${r.count} ratings</span>
           </div>
         </div>
-        <span class="arrow">&#8599;</span>
-      </div>
-    `).join("");
+        <span class="arrow">&#8250;</span>
+      </div>`;
+    }).join("");
 }
 
 function renderDetail(id) {
@@ -2726,7 +2743,7 @@ function renderDetail(id) {
   const overallColor = ratingColor(overall);
   const description = club.description || catDescriptions[club.category];
   const heroCopy = truncateText(description, 165);
-  const heroGradient = (theme === "dark" ? catGradientsDark : catGradients)[club.category] || "linear-gradient(135deg, #0f5475 0%, #118a87 100%)";
+  const heroGradient = (theme === "dark" ? catGradientsDark : catGradients)[club.category] || "linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 52%, #3d3428 120%)";
 
   document.getElementById("detail-breadcrumb").textContent = club.category;
   document.getElementById("detail-back-btn").onclick = () => showScreen(
@@ -2802,7 +2819,6 @@ function renderDetail(id) {
         ${clubAvatarMarkup(club, "detail-avatar", "detail-avatar-placeholder")}
         <div class="detail-title-wrap">
           <h2>${club.name}</h2>
-          <p>${heroCopy}</p>
         </div>
       </div>
       <div class="detail-pill-row">
@@ -2813,7 +2829,7 @@ function renderDetail(id) {
     </div>
 
     <div class="detail-panel">
-      <div class="panel-label">About</div>
+      <div class="panel-label">About Club</div>
       <p class="detail-desc">${description}</p>
     </div>
 
@@ -2826,7 +2842,6 @@ function renderDetail(id) {
         </div>
         <div class="ratings-meta">
           <div class="rating-count">${ratings.count} rating${ratings.count !== 1 ? "s" : ""}</div>
-          <div class="rating-hint">A blended snapshot of seeded scores and student submissions.</div>
         </div>
       </div>
       <div class="metrics-grid">
@@ -2884,19 +2899,22 @@ function renderInterests() {
     return;
   }
 
-  const listHTML = savedClubs.map(club => `
+  const listHTML = savedClubs.map(club => {
+    const r = getClubRatings(club);
+    const ov = (r.metrics.reduce((a, b) => a + b, 0) / r.metrics.length).toFixed(1);
+    return `
     <div class="saved-card">
       ${clubAvatarMarkup(club)}
       <div class="club-info" onclick="previousScreen='interests';showScreen('detail',{clubId:${club.id}})">
         <div class="club-name">${club.name}</div>
         <div class="club-meta">
           <span class="club-chip">${club.category}</span>
-          ${club.instagram ? `<span class="club-chip muted">${club.instagram}</span>` : ""}
+          <span class="club-chip muted">${ov}/5 · ${r.count} ratings</span>
         </div>
       </div>
       <button class="remove-btn" onclick="removeInterest(${club.id})">Remove</button>
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 
   container.innerHTML = `
     <div class="interests-header-area">
