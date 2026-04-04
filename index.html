@@ -173,6 +173,7 @@ img { display: block; max-width: 100%; }
   color: var(--brand-ink);
 }
 
+
 .back-btn {
   width: 42px;
   height: 42px;
@@ -340,9 +341,7 @@ img { display: block; max-width: 100%; }
 .hero-stat {
   padding: 12px 10px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .hero-stat strong {
@@ -2027,6 +2026,20 @@ body.theme-dark .toast {
       <div class="hero-eyebrow">CSULB club directory</div>
       <h1>Find your <span class="gold">beach club.</span></h1>
       <p>Explore student communities, compare vibes, and save the organizations you want to check out first.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong id="hero-stat-clubs"></strong>
+          <span>Clubs</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="hero-stat-categories"></strong>
+          <span>Categories</span>
+        </div>
+        <div class="hero-stat">
+          <strong id="hero-stat-ratings"></strong>
+          <span>Ratings</span>
+        </div>
+      </div>
     </div>
     <div class="search-wrap">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -2947,6 +2960,9 @@ function showToast(msg) {
 applyTheme(theme, { rerender: false });
 renderHome();
 updateBadges();
+document.getElementById("hero-stat-clubs").textContent = clubs.length;
+document.getElementById("hero-stat-categories").textContent = categories.length;
+document.getElementById("hero-stat-ratings").textContent = clubs.reduce((sum, c) => sum + seedRatings(c).count, 0);
 </script>
 </body>
 </html>
